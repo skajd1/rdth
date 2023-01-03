@@ -1,0 +1,4 @@
+RTNOVI_RS_Controller - Grab Info
+version,1000
+Camera[0] grab count / trigger count / drop count : 3600 / 0 / 400
+Camera[1] grab count / trigger count / drop count : 3600 / 0 / 400

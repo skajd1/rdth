@@ -1,0 +1,56 @@
+{
+   "auto_exposure_target" : 110,
+   "auto_exposure_update_distance" : 300,
+   "auto_exposure_update_interval" : null,
+   "average_intensity_roi_start_x" : null,
+   "average_intensity_smoothing_factor" : 0.9990,
+   "camera_0" : {
+      "average_intensity_roi_end_x" : 2000,
+      "average_intensity_roi_start_x" : 1000,
+      "device_index" : 0,
+      "enable_laser_test_image" : false,
+      "exposure" : 1500,
+      "gain" : 1.0,
+      "image_height" : 48,
+      "image_width" : 2048,
+      "ip" : "192.168.100.11",
+      "line_detect_threshold" : 45,
+      "name" : "left",
+      "offset_x" : 0,
+      "offset_y" : 516,
+      "unit_id" : 0
+   },
+   "camera_1" : {
+      "average_intensity_roi_end_x" : 1048,
+      "average_intensity_roi_start_x" : 48,
+      "device_index" : 1,
+      "enable_laser_test_image" : false,
+      "exposure" : 1500,
+      "gain" : 1.0,
+      "image_height" : 48,
+      "image_width" : 2048,
+      "ip" : "192.168.200.10",
+      "line_detect_threshold" : 45,
+      "name" : "right",
+      "offset_x" : 0,
+      "offset_y" : 524,
+      "unit_id" : 1
+   },
+   "data_folder" : "d:\\RoadProfile",
+   "enable_auto_exposure" : true,
+   "laser_0" : {
+      "port" : "COM3",
+      "power" : 100
+   },
+   "laser_1" : {
+      "port" : "COM4",
+      "power" : 100
+   },
+   "maximum_gain_for_ae" : 2.50,
+   "maximum_laser_power_for_ae" : 100,
+   "minimum_laser_power_for_ae" : 100,
+   "rut_depth_smoothing_factor" : 0.990,
+   "trigger_interval" : 50.0,
+   "use_compressed_profile" : false,
+   "use_serial_to_control_laser" : true
+}
