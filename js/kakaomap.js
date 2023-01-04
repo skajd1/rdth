@@ -19,7 +19,7 @@ w : 분석 관심 폭
 */
 let csv_data = []
 
-// 지도생성
+// 지도생성 / 나중에 함수에 넣은 뒤 AJAX Call 에서 호출하게 하면 센터 및 크기레벨 동적제어 가능
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
         center: new kakao.maps.LatLng(37.47776614,126.8913644), // 지도의 중심좌표
@@ -30,8 +30,8 @@ let map = new kakao.maps.Map(mapContainer, mapOption);
 
 // 마커생성
 function createMarkers() {
-    let imageSrc = "../redcircle.png";
-    let imageSize = new kakao.maps.Size(12, 12);
+    let imageSrc = "../greencircle.png";
+    let imageSize = new kakao.maps.Size(10,10);
     let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     for (var i = 0; i < csv_data.length; i++)
     {
@@ -42,20 +42,23 @@ function createMarkers() {
         image: markerImage,
         clickable : true
         });
-        let iwContent = '<img src ='+ '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/'+ csv_data[i].status_img + ' height = "200" width = "180">'
-        let iwRemoveable = true;
+        let status_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/'+ csv_data[i].status_img
+        let surf_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
+        let iwContent = '' // 인포 윈도우 내용 설정
         let infowindow = new kakao.maps.InfoWindow({
             content : iwContent,
-            removable : iwRemoveable,
+            removable : true,
             position : position
         });
-
-        kakao.maps.event.addListener(marker, 'click', function() {
-            infowindow.open(map, marker);  
-        });
+        // 클릭 리스너, 다른 차트와 연동할 때 사용
+        kakao.maps.event.addListener(marker, 'click', function(){
+            //infowindow.open(map, marker);
+            document.getElementById("status_img").src = status_img_src;
+            document.getElementById("surf_img").src = surf_img_src;
+            }
+        );
     }
 }
-
 
 
 // csv 읽는 Ajax call
