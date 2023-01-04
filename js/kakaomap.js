@@ -18,6 +18,11 @@ note : 비고
 w : 분석 관심 폭
 */
 let csv_data = []
+let marker_green = "../greencircle.png";
+let marker_orange = "../orangecircle.png";
+let marker_red = "../redcircle.png";
+let marker_yellow = "../yellowcircle.png";
+let marker_blue = '../bluecircle.png';
 
 // 지도생성 / 나중에 함수에 넣은 뒤 AJAX Call 에서 호출하게 하면 센터 및 크기레벨 동적제어 가능
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
@@ -27,23 +32,65 @@ let mapContainer = document.getElementById('map'), // 지도를 표시할 div
     };
 let map = new kakao.maps.Map(mapContainer, mapOption);
 
+var mapTypeControl = new kakao.maps.MapTypeControl();
+map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+var zoomControl = new kakao.maps.ZoomControl();
+map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+function get_color_SPI(num)
+{
+    if (num <=2)
+    {
+        return marker_red;
+    }
+    else if (num <=4)
+    {
+        return marker_orange;
+    }
+    else if (num <= 6)
+    {
+        return marker_yellow;
+    }
+    else if (num <= 8)
+    {
+        return marker_green;
+    }
+    else
+    {
+        return marker_blue
+    }
+}
 
 // 마커생성
-function createMarkers() {
-    let imageSrc = "../greencircle.png";
-    let imageSize = new kakao.maps.Size(10,10);
-    let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+function createMarkers(select) {
+
+    let markerSize = new kakao.maps.Size(10,10);
+    //let markerImage = new kakao.maps.MarkerImage(marker_green, imageSize);
+
     for (var i = 0; i < csv_data.length; i++)
     {
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]),parseFloat(csv_data[i].latlng[1]))
+
+        let markercolor =
+        {
+            "all" : marker_blue,
+            "SPI1" : get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+            "SPI2" : get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+            "SPI3" : get_color_SPI(parseFloat(csv_data[i].SPI_3))
+        }
+        
+        let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
         let marker = new kakao.maps.Marker({
         map: map,
         position: position,
         image: markerImage,
         clickable : true
         });
+
         let status_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/'+ csv_data[i].status_img
         let surf_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
+
+        
         let iwContent = '' // 인포 윈도우 내용 설정
         let infowindow = new kakao.maps.InfoWindow({
             content : iwContent,
@@ -79,7 +126,7 @@ $.ajax({
              AP_P : [column[24],column[25],column[26]], AP_H : [column[27],column[28],column[29]], note : column[30], w : column[31]})  
         }
 
-        createMarkers();
+        createMarkers('all');
     }
     });
 });
