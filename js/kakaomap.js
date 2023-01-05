@@ -18,16 +18,19 @@ note : 비고
 w : 분석 관심 폭
 */
 let csv_data = []
+let marker = []
+let infoWindows = []
 let marker_green = "../greencircle.png";
 let marker_orange = "../orangecircle.png";
 let marker_red = "../redcircle.png";
 let marker_yellow = "../yellowcircle.png";
 let marker_blue = '../bluecircle.png';
 
+
 // 지도생성 / 나중에 함수에 넣은 뒤 AJAX Call 에서 호출하게 하면 센터 및 크기레벨 동적제어 가능
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-    mapOption = { 
-        center: new kakao.maps.LatLng(37.47776614,126.8913644), // 지도의 중심좌표
+    mapOption = {
+        center: new kakao.maps.LatLng(37.47776614, 126.8913644), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 let map = new kakao.maps.Map(mapContainer, mapOption);
@@ -37,96 +40,118 @@ map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 var zoomControl = new kakao.maps.ZoomControl();
 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-function get_color_SPI(num)
-{
-    if (num <=2)
-    {
+
+function get_color_SPI(num) {
+    if (num <= 2) {
         return marker_red;
     }
-    else if (num <=4)
-    {
+    else if (num <= 4) {
         return marker_orange;
     }
-    else if (num <= 6)
-    {
+    else if (num <= 6) {
         return marker_yellow;
     }
-    else if (num <= 8)
-    {
+    else if (num <= 8) {
         return marker_green;
     }
-    else
-    {
+    else {
         return marker_blue
     }
 }
-
-// 마커생성
+function createIw()
+{
+ for (let i = 0; i < csv_data.length; i++)
+ {
+    let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
+    let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
+    let infowindow = new kakao.maps.InfoWindow({
+        content: iwContent,
+        removable: true,
+        position: position
+    });
+    infoWindows.push(infowindow);
+ }
+    
+}
+function deleteIw(iws) {
+    if (iws.length !== 0) {
+        for (iw of iws) {
+            iw.close()
+        }
+    }
+}
 function createMarkers(select) {
 
-    let markerSize = new kakao.maps.Size(10,10);
-    //let markerImage = new kakao.maps.MarkerImage(marker_green, imageSize);
+    deleteIw(infoWindows)
+    deleteMarkers(marker)
+    marker = []
 
-    for (var i = 0; i < csv_data.length; i++)
-    {
-        let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]),parseFloat(csv_data[i].latlng[1]))
+
+    let markerSize = new kakao.maps.Size(10, 10);
+
+    for (let i = 0; i < csv_data.length; i++) {
+        let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
         let markercolor =
         {
-            "all" : marker_blue,
-            "SPI1" : get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-            "SPI2" : get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-            "SPI3" : get_color_SPI(parseFloat(csv_data[i].SPI_3))
+            "all": marker_blue,
+            "SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+            "SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+            "SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
         }
-        
+
         let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
-        let marker = new kakao.maps.Marker({
-        map: map,
-        position: position,
-        image: markerImage,
-        clickable : true
+        marker[i] = new kakao.maps.Marker({
+            map: map,
+            position: position,
+            image: markerImage,
+            clickable: true
         });
 
-        let status_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/'+ csv_data[i].status_img
+        let status_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[i].status_img
         let surf_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
 
-        
-        let iwContent = '' // 인포 윈도우 내용 설정
-        let infowindow = new kakao.maps.InfoWindow({
-            content : iwContent,
-            removable : true,
-            position : position
-        });
         // 클릭 리스너, 다른 차트와 연동할 때 사용
-        kakao.maps.event.addListener(marker, 'click', function(){
-            //infowindow.open(map, marker);
-            document.getElementById("status_img").src = status_img_src;
-            document.getElementById("surf_img").src = surf_img_src;
-            }
+        kakao.maps.event.addListener(marker[i], 'click', function () {
+            deleteIw(infoWindows)
+            infoWindows[i].open(map, marker[i]); // 클릭할 때 인포 윈도우 생성
+            document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
+            document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
+            map.setCenter(position) // 선택한 마커 중심으로 맵 이동
+        }
         );
     }
+}
+function deleteMarkers(marker) {
+    if (marker.length !== 0) {
+        for (let i = 0; i < csv_data.length; i++) {
+            marker[i].setMap(null);
+        }
+    }
+
 }
 
 
 // csv 읽는 Ajax call
-$(function() {
-let fileName = "pont.csv";
-$.ajax({
-    url: fileName,
-    dataType: "text",
-    success: function(data)
-    {   
-        let allRow = data.split("\n");
-        for (let i = 14; i< allRow.length -1 ; i++)
-        {
-            let column = allRow[i].split(",")
-            csv_data.push({dist : column[0], status_img : column[1], surf_img : column[2], pd : column[3], roughness : column[4], latlng : [column[5], column[6]],
-             amount_crack : column[7], ratio_crack : column[8], SPI_1 : column[9], SPI_2 : column[10], SPI_3 : column[11], AP_L : [column[12], column[13], column[14]],
-             AP_T : [column[15],column[16],column[17]], AP_CJ : [column[18],column[19],column[20]], AP_AC : [column[21],column[22],column[23]],
-             AP_P : [column[24],column[25],column[26]], AP_H : [column[27],column[28],column[29]], note : column[30], w : column[31]})  
+$(function () {
+    let fileName = "pont.csv";
+    $.ajax({
+        url: fileName,
+        dataType: "text",
+        success: function (data) {
+            let allRow = data.split("\n");
+            for (let i = 14; i < allRow.length - 1; i++) {
+                let column = allRow[i].split(",")
+                csv_data.push({
+                    dist: column[0], status_img: column[1], surf_img: column[2], pd: column[3], roughness: column[4], latlng: [column[5], column[6]],
+                    amount_crack: column[7], ratio_crack: column[8], SPI_1: column[9], SPI_2: column[10], SPI_3: column[11], AP_L: [column[12], column[13], column[14]],
+                    AP_T: [column[15], column[16], column[17]], AP_CJ: [column[18], column[19], column[20]], AP_AC: [column[21], column[22], column[23]],
+                    AP_P: [column[24], column[25], column[26]], AP_H: [column[27], column[28], column[29]], note: column[30], w: column[31]
+                })
+            }
+            createIw();
+            createMarkers('all');
+            
         }
-
-        createMarkers('all');
-    }
     });
 });
