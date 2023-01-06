@@ -163,6 +163,9 @@ $(function () {
                 
             createIw();
             createMarkers('all');
+            setDistance()
+            setText(getAvg(ColumnData.pd), "avg-pd")
+            setText(getAvg(ColumnData.roughness), "avg-rough")
             
         }
     });
@@ -182,3 +185,30 @@ $( function() {
     $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
       " - " + $( "#slider-range" ).slider( "values", 1 ) );    
   });
+
+
+
+
+function setDistance()
+{   
+    let sum = 0;
+    for(let i = 0 ; i < csv_data.length ; i ++)
+    {
+        sum += parseFloat(ColumnData.dist[i])
+    }
+    document.getElementById("distance").innerText = sum
+}
+function getAvg(data_array)
+{
+    let sum = 0;
+    for(let i = 0; i < csv_data.length; i ++)
+    {
+        sum += parseFloat(data_array[i])
+    }
+    return sum / csv_data.length ;
+}
+function setText(value, ID)
+{
+    document.getElementById(ID).innerText = value
+}
+

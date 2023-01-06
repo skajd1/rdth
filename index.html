@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
-
+    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -17,81 +17,122 @@
         </div>
     </nav>
     
-
 </head>
 
 <body>
-    <div id = "select" style = "border : 1px groove; width : 180px;height : 550px; position : absolute; left : 10px; top : 60px">
-        <form method = "get" action = ''>
-            <fieldset style = "padding-left : 15px; width:16    0px; height : 300px; ">
-                <legend>도로상태유형</legend>
-                <input class = "form-check-input" type = "radio" id = "all" name = "select_form" value ="All" checked
-                onclick = 'createMarkers(event.target.id)'>
-                <label for="all"> 전체 </label><br>
-                
-                <input class = "form-check-input" type = "radio" id = "pd" name = "select_form" value ="p"
-                 onclick = ''>
-                <label for="pd"> 소성변형 </label><br>
-              
-                <input class = "form-check-input" type = "radio" id = "rough" name = "select_form" value ="lr"
-                 onclick = ''>
-                <label for="rough"> 종단평탄성 </label><br>
-                
-                <input class = "form-check-input" type = "radio" id = "ac" name = "select_form" value ="a"
-                 onclick = ''>
-                <label for="ac"> 균열량 </label><br>
-                
-                <input class = "form-check-input" type = "radio" id = "rc" name = "select_form" value ="r"
-                 onclick = ''>
-                <label for="rc"> 균열율 </label><br>
-                
-                <input class = "form-check-input" type = "radio" id = "SPI1" name = "select_form" value ="spi1"
-                 onclick = 'createMarkers(event.target.id)'>
-                <label for="SPI1"> 도시고속도로 </label><br>
-               
-                <input class = "form-check-input" type = "radio" id = "SPI2" name = "select_form" value ="spi2"
-                 onclick = 'createMarkers(event.target.id)'>
-                <label for="SPI2"> 주간선도로 </label><br>
-                
-                <input class = "form-check-input" type = "radio" id = "SPI3" name = "select_form" value ="spi3"
-                 onclick = 'createMarkers(event.target.id)'>
-                <label for="SPI3"> 보조간선도로 </label><br>            
-                
-            </fieldset>
-        </form>
+    <div class = "main">
 
-        <div id = "select_range" style = "text-align : center;width : 180px; height : 230px">
-            <label for="amount">데이터 범위 설정:</label>
-            <input type="text" id="amount" readonly style="border:0;width : 150px;text-align:center">
-            <div style = "padding-left:15px">
-                <div style = "width : 150px; text-align : center"id="slider-range"></div>
+    
+        <div class = 'selectbox' id = "select">
+            <form method = "get">
+                <fieldset class = 'radiobox'>
+                    <legend>도로상태유형</legend>
+                    <input class = "form-check-input" type = "radio" id = "all" name = "select_form" value ="All" checked
+                    onclick = 'createMarkers(event.target.id)'>
+                    <label for="all"> 전체 </label><br>
+                    
+                    <input class = "form-check-input" type = "radio" id = "pd" name = "select_form" value ="p"
+                    onclick = ''>
+                    <label for="pd"> 소성변형 </label><br>
+                
+                    <input class = "form-check-input" type = "radio" id = "rough" name = "select_form" value ="lr"
+                    onclick = ''>
+                    <label for="rough"> 종단평탄성 </label><br>
+                    
+                    <input class = "form-check-input" type = "radio" id = "ac" name = "select_form" value ="a"
+                    onclick = ''>
+                    <label for="ac"> 균열량 </label><br>
+                    
+                    <input class = "form-check-input" type = "radio" id = "rc" name = "select_form" value ="r"
+                    onclick = ''>
+                    <label for="rc"> 균열율 </label><br>
+                    
+                    <input class = "form-check-input" type = "radio" id = "SPI1" name = "select_form" value ="spi1"
+                    onclick = 'createMarkers(event.target.id)'>
+                    <label for="SPI1"> 도시고속도로 </label><br>
+                
+                    <input class = "form-check-input" type = "radio" id = "SPI2" name = "select_form" value ="spi2"
+                    onclick = 'createMarkers(event.target.id)'>
+                    <label for="SPI2"> 주간선도로 </label><br>
+                    
+                    <input class = "form-check-input" type = "radio" id = "SPI3" name = "select_form" value ="spi3"
+                    onclick = 'createMarkers(event.target.id)'>
+                    <label for="SPI3"> 보조간선도로 </label><br>            
+                    
+                </fieldset>
+            </form>
+
+            <div class = 'rangebox' id = "select_range">
+                <label for="amount">데이터 범위 설정:</label>
+                <input type="text" id="amount" readonly style="border:0;width : 150px; text-align:center">
+                <div style = "text-align : center; width : 150px; margin : 0 auto">
+                    <div style = "width : 120px; margin : 0 auto;"id="slider-range"></div>
+                </div>
             </div>
         </div>
-    </div>
+        <div class = "mapbox">
+            <div id="map" class = "kakaomap"></div>
 
-    <div id="map" style="width:500px;height:550px; position : absolute; left: 200px; top: 60px"></div>
-
-    <div style = "position : absolute; left : 200px ; top : 615px; border : 1px groove; width : 500px; height : 320px; display : flex;">
-        <div style = "width : 250px; height : 280px; text-align : center">
-            <button onclick = 'window.open(document.getElementById("status_img").src,"도로 현황","width= 1024, height=768, location = no, status = no, scrollbars = yes")'
-            type="button" class="btn btn-dark">확대</button>
-            <div style = "margin-left : 15px;border : 1px groove; width : 221px; height : 252px;">
-                <img  id = "status_img" style = 'width : 220px; height : 250px'>
+            <div class = "imagebox">
+                <div class = "imagedetail">
+                    <button onclick = 'window.open(document.getElementById("status_img").src,"도로 현황","width= 1024, height=768, location = no, status = no, scrollbars = yes")'
+                    type="button" class="btn btn-dark">확대</button>
+                    <div class = "imageborder">
+                        <img class = "img" id = "status_img">
+                    </div>
+                    <div>도로 현황</div>
+                </div>
+                <div class = "imagedetail">
+                    <button onclick = 'window.open(document.getElementById("surf_img").src,"도로 표면","width= 1024, height=768, location = no, status = no, scrollbars = yes")'
+                    type="button" class="btn btn-dark">확대</button>
+                    <div class = "imageborder">
+                        <img class = "img" id = "surf_img">
+                    </div>
+                    <div>도로 표면</div>
+                </div>
             </div>
-            <div>도로 현황</div>
         </div>
-        <div style = "width : 250px; height : 280px; text-align : center">
-            <button onclick = 'window.open(document.getElementById("surf_img").src,"도로 표면","width= 1024, height=768, location = no, status = no, scrollbars = yes")'
-            type="button" class="btn btn-dark">확대</button>
-            <div style = "margin-left : 15px; border : 1px groove; width : 222px; height : 252px;">
-                <img id = "surf_img" style = 'width : 220px; height : 250px;'>
+        <div class = "chartbox">
+            <div class = "cb1">
+                <div class = "cb1-distance">
+                    총거리 : <span id = "distance"></span> km
+                </div>
+                <div class = "cb1-deformation">
+                    <div>
+                        평균 소성변형 : <span id = "avg-pd"></span>
+                    </div>
+                    <div>
+                        평균 종단평탄성 : <span id = "avg-rough"></span>
+                    </div>
+                </div>
+                <div class = "cb1-crack" >
+                    평균 균열 :<span></span>(단위)
+                </div>
+                <div class = "cb1-SPI">
+                    SPI지수 :<span></span>(단위)
+                </div>
             </div>
-            <div>도로 표면</div>
+            <div class = "cb2">
+                <div class = "cb2-AP-L">AP종</div>
+                <div class = "cb2-AP-T">AP횡</div>
+                <div class = "cb2-AP-CJ">AP시공줄눈</div>
+                <div class = "cb2-AP-AC">AP거북등</div>
+                <div class = "cb2-AP-P">AP패칭</div>
+                <div class = "cb2-AP-H">AP포트홀</div>
+            </div>
+            <div class = "cb3">
+                csv_data 그리드
+            </div>
+
+
         </div>
     </div>
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=649875af421ea126bd6af75263cc7e9b"></script>
     <script type="text/javascript" src="./kakaomap.js"> </script>
+    <script type="text/javascript">
+        
+    </script>
 
 </body>
 </html>
