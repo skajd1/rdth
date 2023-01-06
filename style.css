@@ -1,0 +1,89 @@
+.main{
+    margin-left : 7.5px;
+    width : 1920px;
+    display : flex;
+}
+.selectbox{
+    border : 1px groove;
+    width : 180px;
+    height : 550px;
+    position : relative; left : 10px; top : 10px
+}
+.radiobox{
+    padding-left : 15px;
+    height : 300px; 
+}
+.rangebox{
+    text-align : center;
+    height : 230px
+}
+
+.mapbox{
+    width : 440px;
+    position : relative;left: 20px;top: 10px
+}
+.kakaomap{
+    height:550px; 
+}
+.imagebox{
+    border : 1px groove;
+    margin-top : 10px;
+    display : flex;
+}
+.imagedetail{
+    width : 50%;
+    height : 320px;
+    text-align : center;
+}
+.imageborder{
+    margin : 1px 5px 1px 5px;
+    border : 1px groove;
+    height : 252px;
+}
+.imagebox img{
+    width : 100%;
+    height : 250px;
+}
+.imagebox button{
+    margin-top : 3px;
+}
+
+.chartbox{
+    position : relative;left : 30px;top: 10px;
+    width : 1260px;
+}
+.cb1{
+    height : 20%;
+    display : flex;
+    
+    
+}
+.cb1 > *{
+    border : 1px groove;
+    width : 25%;
+    margin-right : 10px;
+    text-align : center;
+    padding-top : 70px;
+    
+}
+
+
+.cb2{
+    margin-top : 5px;
+    display : flex;
+    height : 30%
+
+}
+.cb2 > *{
+    border : 1px groove;
+    width : 18%;
+    margin-right : 10px;
+    text-align : center;
+    padding-top : 70px;
+}
+.cb3{
+    margin-right : 10px;
+    margin-top : 5px;
+    border : 1px groove;
+    height : 49%
+}
