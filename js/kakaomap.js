@@ -17,14 +17,16 @@ AP_H : 포트홀
 note : 비고
 w : 분석 관심 폭
 */
-let csv_data = []
-let marker = []
-let infoWindows = []
+let csv_data = [];
+let marker = [];
+let infoWindows = [];
+let ColumnData = {};
 let marker_green = "../greencircle.png";
 let marker_orange = "../orangecircle.png";
 let marker_red = "../redcircle.png";
 let marker_yellow = "../yellowcircle.png";
 let marker_blue = '../bluecircle.png';
+ 
 
 
 // 지도생성 / 나중에 함수에 넣은 뒤 AJAX Call 에서 호출하게 하면 센터 및 크기레벨 동적제어 가능
@@ -33,6 +35,7 @@ let mapContainer = document.getElementById('map'), // 지도를 표시할 div
         center: new kakao.maps.LatLng(37.47776614, 126.8913644), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
+
 let map = new kakao.maps.Map(mapContainer, mapOption);
 
 var mapTypeControl = new kakao.maps.MapTypeControl();
@@ -75,7 +78,7 @@ function createIw()
 }
 function deleteIw(iws) {
     if (iws.length !== 0) {
-        for (iw of iws) {
+        for (let iw of iws) {
             iw.close()
         }
     }
@@ -149,9 +152,33 @@ $(function () {
                     AP_P: [column[24], column[25], column[26]], AP_H: [column[27], column[28], column[29]], note: column[30], w: column[31]
                 })
             }
+            for (let key of Object.keys(csv_data[0]) )
+            {   
+                ColumnData[key] = [];
+                for(let i = 0 ; i < csv_data.length ; i ++)
+                {
+                    ColumnData[key].push(csv_data[i][key])
+                }
+            }
+                
             createIw();
             createMarkers('all');
             
         }
     });
 });
+
+
+$( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [0,500],
+      slide: function( event, ui ) {
+        $( "#amount" ).val(ui.values[0] + " - " + ui.values[1]);
+      }
+    });
+    $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) );    
+  });
