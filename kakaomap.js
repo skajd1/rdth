@@ -21,11 +21,11 @@ let csv_data = [];
 let marker = [];
 let infoWindows = [];
 let ColumnData = {};
-let marker_green = "../greencircle.png";
-let marker_orange = "../orangecircle.png";
-let marker_red = "../redcircle.png";
-let marker_yellow = "../yellowcircle.png";
-let marker_blue = '../bluecircle.png';
+let marker_green = "./greencircle.png";
+let marker_orange = "./orangecircle.png";
+let marker_red = "./redcircle.png";
+let marker_yellow = "./yellowcircle.png";
+let marker_blue = './bluecircle.png';
  
 
 
@@ -111,8 +111,8 @@ function createMarkers(select) {
             clickable: true
         });
 
-        let status_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[i].status_img
-        let surf_img_src = '../가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
+        let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[i].status_img
+        let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
 
         // 클릭 리스너, 다른 차트와 연동할 때 사용
         kakao.maps.event.addListener(marker[i], 'click', function () {
