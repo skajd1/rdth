@@ -97,10 +97,10 @@ function createMarkers(select) {
 
         let markercolor =
         {
-            "all": marker_blue,
-            "SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-            "SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-            "SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+            "radio-all": marker_blue,
+            "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+            "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+            "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
         }
 
         let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
@@ -162,10 +162,9 @@ $(function () {
             }
                 
             createIw();
-            createMarkers('all');
-            setDistance()
-            setText(getAvg(ColumnData.pd), "avg-pd")
-            setText(getAvg(ColumnData.roughness), "avg-rough")
+            createMarkers('radio-all');
+            valueInitialize()
+
             
         }
     });
@@ -187,16 +186,49 @@ $( function() {
   });
 
 
+function valueInitialize()
+{   
+    for(let key of Object.keys(csv_data[0]))
+    {
+        if (key ==='w' || key ==='note' || key === 'status_img' || key === 'surf_img' || key === 'latlng')
+        {
+            continue;
+        }
+        else if (key === 'dist')
+        {
+            setText(getSum(ColumnData.dist),"dist");
+        }
+        else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
+        {
+            
+            for(let j = 0 ; j < 3 ; j ++)
+            {   
+                let id = key+"_"+(j+1)
+                let sum = 0;
+                for(let i = 0 ; i < csv_data.length; i++)
+                {
+                    sum += parseFloat(ColumnData[key][i][j]);
+                }
+                setText(sum,id)
+            }     
+        }
+        else
+        {
+            setText(getAvg(ColumnData[key]),key)
+        }
 
+    }
 
-function setDistance()
+}
+
+function getSum(data_array)
 {   
     let sum = 0;
     for(let i = 0 ; i < csv_data.length ; i ++)
     {
-        sum += parseFloat(ColumnData.dist[i])
+        sum += parseFloat(data_array[i])
     }
-    document.getElementById("distance").innerText = sum
+    return sum;
 }
 function getAvg(data_array)
 {
