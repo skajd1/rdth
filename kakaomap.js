@@ -164,6 +164,7 @@ $(function () {
             createIw();
             createMarkers('radio-all');
             valueInitialize()
+            makeTable(csv_data);
 
             
         }
@@ -244,3 +245,21 @@ function setText(value, ID)
     document.getElementById(ID).innerText = value
 }
 
+function makeTable(jsonData) {
+
+    let table = document.getElementById('cb3-table-body');
+    let table_head = ["dist","note","w","pd","roughness","amount_crack","ratio_crack","SPI_1","SPI_2",
+"SPI_3","AP_L","AP_L","AP_L","AP_T","AP_T","AP_T","AP_CJ","AP_CJ","AP_CJ","AP_AC","AP_AC","AP_AC","AP_P","AP_P","AP_P","AP_H","AP_H","AP_H"];
+
+    for(i=0; i<csv_data.length; i++){
+		let tr = document.createElement("tr");
+        for (let head of table_head)
+        {
+            let td = document.createElement("td")
+            td.appendChild(document.createTextNode(ColumnData[head][i]+ ""));
+            tr.appendChild(td)
+        }
+		table.appendChild(tr);
+	}
+
+}

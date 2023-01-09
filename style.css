@@ -6,7 +6,7 @@
 .selectbox{
     border : 1px groove;
     width : 180px; 
-    position : relative; left : 10px; top : 10px
+    position : relative; left : 10px; top : 10px;
 }
 .radiobox{
     padding-left : 15px;
@@ -57,10 +57,11 @@
 
 .chartbox{
     position : relative;left : 30px;top: 10px;
-    width : 1260px;
+    width : 1250px;
+    height : 880px;
 }
 .cb1{
-    height : 20%;
+    height : 180px;
     display : flex;
     
     
@@ -78,7 +79,7 @@
 .cb2{
     margin-top : 5px;
     display : flex;
-    height : 30%
+    height : 220px
 
 }
 .cb2 > *{
@@ -92,5 +93,23 @@
     margin-right : 10px;
     margin-top : 5px;
     border : 1px groove;
-    height : 49%
+    height : 54%;
+    overflow : auto;
+    white-space: nowrap;
+}
+#cb3-table-head{
+    height : 60px;
+    position: sticky;
+    top: 0px;
+    background-color: darkgrey;
+}
+#cb3-table-body{
+    height : 500px;
+}
+th{
+
+    padding-right : 15px;
+}
+tr{
+    width : 1000px;
 }
