@@ -196,7 +196,7 @@ function valueInitialize()
         }
         else if (key === 'dist')
         {
-            setText(getSum(ColumnData.dist),"dist");
+            setText(getSum(ColumnData.dist).toFixed(3),"dist");
         }
         else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
         {
@@ -209,12 +209,12 @@ function valueInitialize()
                 {
                     sum += parseFloat(ColumnData[key][i][j]);
                 }
-                setText(sum,id)
+                setText(sum.toFixed(3),id)
             }     
         }
         else
         {
-            setText(getAvg(ColumnData[key]),key)
+            setText(getAvg(ColumnData[key]).toFixed(3),key)
         }
 
     }
@@ -237,7 +237,7 @@ function getAvg(data_array)
     {
         sum += parseFloat(data_array[i])
     }
-    return sum / csv_data.length ;
+    return (sum / csv_data.length) ;
 }
 function setText(value, ID)
 {

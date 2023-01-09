@@ -5,8 +5,7 @@
 }
 .selectbox{
     border : 1px groove;
-    width : 180px;
-    height : 550px;
+    width : 180px; 
     position : relative; left : 10px; top : 10px
 }
 .radiobox{
@@ -16,6 +15,14 @@
 .rangebox{
     text-align : center;
     height : 230px
+}
+.category-color-box{
+    
+    height : 200px;
+    border : 1px groove;
+    margin-top : 20px;
+    margin-left : 10px;
+    margin-right : 10px;
 }
 
 .mapbox{
