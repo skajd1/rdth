@@ -218,7 +218,7 @@ function valueInitialize() {
                 {
                     sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
-                setText(sum[j].toFixed(3),id)
+                //setText(sum[j].toFixed(3),id)
                 
             }   
 
