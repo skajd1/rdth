@@ -1,3 +1,18 @@
+@import url(//fonts.googleapis.com/earlyaccess/hanna.css);
+
+body div {
+    font-family: 'Hanna', cursive;
+}
+body span {
+    color: gray;
+}
+.cb1-SPI span{
+    color: black;
+}
+.cb1-SPI div span{
+    color: gray;
+}
+
 .main{
     margin-left : 7.5px;
     width : 1920px;
@@ -55,27 +70,46 @@
     margin-top : 3px;
 }
 
+/** class chartbox - html, chart, grid */
 .chartbox{
     position : relative;left : 30px;top: 10px;
     width : 1250px;
     height : 880px;
 }
+
+/** class cb1 - html 1, 2, 3, 4 */
 .cb1{
     height : 180px;
     display : flex;
-    
-    
 }
 .cb1 > *{
     border : 1px groove;
+    height: 100%;
     width : 25%;
     margin-right : 10px;
     text-align : center;
-    padding-top : 70px;
-    
+    padding: 20px 10px 20px 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
 }
 
+.cb1-distance {
+    font-size: 2.5em;
+}
+.cb1-deformation {
+    font-size: 2.0em;
+}
+.cb1-crack {
+    font-size: 2.0em;
+}
+.cb1-SPI{
+    font-size: 1.5em;
+}
 
+/** class cb2 - chart 1, 2, 3*/
 .cb2{
     margin-top : 5px;
     display : flex;

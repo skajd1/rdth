@@ -27,6 +27,7 @@
         }
     </style>
     <div class = "main">
+        <!-- 선택 메뉴바 -->
         <div class = 'selectbox' id = "select">
             <form method = "get">
                 <fieldset class = 'radiobox'>
@@ -101,12 +102,12 @@
             </div>
         </div>
 
-        <!-- html&chart&grid -->
-        <div class = "chartbox">
+        <!-- html&chart&grid --> 
+        <div class = "chartbox">  
+            <!-- cb1 - html -->
             <div class = "cb1">
-
                 <div class = "cb1-distance">
-                    총거리 : <span id = "dist"></span> km
+                    <div>총거리 : <span id = "dist"></span> km</div>
                 </div>
 
                 <div class = "cb1-deformation">
@@ -127,7 +128,7 @@
                     </div>
                 </div>
 
-                <div class = "cb1-SPI" style = "padding-top : 50px">
+                <div class = "cb1-SPI">
                     <span>SPI</span>
                     <div>
                         도시고속도로: <span id = "SPI_1"></span>
@@ -257,6 +258,7 @@
                 </table>
             </div>
         </div>
+        
     </div>
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=649875af421ea126bd6af75263cc7e9b"></script>
