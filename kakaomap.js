@@ -253,11 +253,20 @@ function makeTable(jsonData) {
 
     for(i=0; i<csv_data.length; i++){
 		let tr = document.createElement("tr");
+        count = 0
         for (let head of table_head)
         {
             let td = document.createElement("td")
-            td.appendChild(document.createTextNode(ColumnData[head][i]+ ""));
-            tr.appendChild(td)
+            if (head.startsWith('AP_'))
+            {
+                td.appendChild(document.createTextNode(ColumnData[head][i][count%3]+ ""));
+                tr.appendChild(td)
+                count++
+            }
+            else{
+                td.appendChild(document.createTextNode(ColumnData[head][i]+ ""));
+                tr.appendChild(td)
+            }
         }
 		table.appendChild(tr);
 	}
