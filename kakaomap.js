@@ -257,7 +257,6 @@ function makeTable() {
     for(let i=0; i<csv_data.length; i++){
 		let tr = document.createElement("tr");
         tr.id = 'table-row-' + i
-
         count = 0
         for (let head of table_head)
         {
@@ -290,9 +289,23 @@ function selectData(selectedRow){
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
     let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
+    let keys = ['AP_L', 'AP_T', 'AP_CJ','AP_AC','AP_P','AP_H'];
     deleteIw(infoWindows)
     if (selected === index)
     {
+        for(let key of keys)
+        {
+            for(let i = 0; i < 3 ; i++)
+            {
+                let id = key+"_"+(i+1)
+                let sum = 0;
+                for(let j = 0 ; j < csv_data.length; j++)
+                {
+                    sum += parseFloat(ColumnData[key][j][i]);
+                }
+                setText(sum.toFixed(3),id)
+            }
+        }
         document.getElementById("table-row-" + index).style = "background-color : white"
         selected = -1
         return
@@ -300,11 +313,19 @@ function selectData(selectedRow){
     infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
     document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
     document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-    for (let i = 0; i < csv_data.length; i++)
+    for (let i = 0; i < csv_data.length; i++) // 다른 행 강조 해제
     {
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
-    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)"
+    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)" // 행 강조
+    for(let key of keys)
+    {
+        for(let i = 0; i < 3 ; i++)
+        {
+            setText(csv_data[index][key][i],(key + '_' + (i+1)));
+        }
+    }
+
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
 
