@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -33,7 +36,7 @@
                 <fieldset class = 'radiobox'>
                     <legend>도로상태유형</legend>
                     <input class = "form-check-input" type = "radio" id = "radio-all" name = "select_form" value ="All" checked
-                    onclick = 'createMarkers(event.target.id)'>
+                    onclick = 'setMarkers(event.target.id)'>
                     <label for="radio-all"> 전체 </label><br>
                     
                     <input class = "form-check-input" type = "radio" id = "radio-pd" name = "select_form" value ="p"
@@ -53,15 +56,15 @@
                     <label for="radio-rc"> 균열율 </label><br>
                     
                     <input class = "form-check-input" type = "radio" id = "radio-SPI1" name = "select_form" value ="spi1"
-                    onclick = 'createMarkers(event.target.id)'>
+                    onclick = 'setMarkers(event.target.id)'>
                     <label for="radio-SPI1"> 도시고속도로 </label><br>
                 
                     <input class = "form-check-input" type = "radio" id = "radio-SPI2" name = "select_form" value ="spi2"
-                    onclick = 'createMarkers(event.target.id)'>
+                    onclick = 'setMarkers(event.target.id)'>
                     <label for="radio-SPI2"> 주간선도로 </label><br>
                     
                     <input class = "form-check-input" type = "radio" id = "radio-SPI3" name = "select_form" value ="spi3"
-                    onclick = 'createMarkers(event.target.id)'>
+                    onclick = 'setMarkers(event.target.id)'>
                     <label for="radio-SPI3"> 보조간선도로 </label><br>            
                     
                 </fieldset>
@@ -220,9 +223,9 @@
                 <table cellspacing="1px" cellpadding="1px">
                     <thead id = "cb3-table-head">
                         <tr>
-                            <th rowspan = '2' >거리</th>
-                            <th rowspan = '2' style = "margin-left : 10px; margin-right : 10px;">비고</th>
-                            <th rowspan = '2'>관심 폭</th>
+                            <th rowspan = '2'>거리</th>
+                            <th rowspan = '2'>비고</th>
+                            <th rowspan = '2'>분석 폭</th>
                             <th rowspan = '2'>소성변형</th>
                             <th rowspan = '2'>종단평탄성</th>
                             <th rowspan = '2'>균열량</th>
@@ -230,7 +233,7 @@
                             <th rowspan = '2'>도시고속도로</th>
                             <th rowspan = '2'>주간선도로</th>
                             <th rowspan = '2'>보조간선도로</th>
-                            <th sylte = "width : 150px" colspan = '3'>AP 종방향균열</th>
+                            <th colspan = '3'>AP 종방향균열</th>
                             <th colspan = '3'>AP 횡방향균열</th>
                             <th colspan = '3'>AP 시공줄눈</th>
                             <th colspan = '3'>AP 거북등껍질</th>

@@ -26,6 +26,7 @@ let marker_orange = "./orangecircle.png";
 let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
+let selected = -1
  
 
 
@@ -290,6 +291,12 @@ function selectData(selectedRow){
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
     let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
     deleteIw(infoWindows)
+    if (selected === index)
+    {
+        document.getElementById("table-row-" + index).style = "background-color : white"
+        selected = -1
+        return
+    }
     infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
     document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
     document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
@@ -297,29 +304,8 @@ function selectData(selectedRow){
     {
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
-    document.getElementById("table-row-" + index).style = "background-color : #A0A0C8"
+    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)"
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
-
-}
-
-function selectData(selectedRow){
-    //기존 선택되었던 컬럼 선택 해제,
-    //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
-
-
-    let index = selectedRow;
-    let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
-    let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
-    let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
-    deleteIw(infoWindows)
-    infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
-    document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
-    document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-    for (let i = 0; i < csv_data.length; i++)
-    {
-        document.getElementById("table-row-" + i).style = "background-color : white"
-    }
-    document.getElementById("table-row-" + index).style = "background-color : #A0A0C8"
-    map.setCenter(position) // 선택한 마커 중심으로 맵 이동
+    selected = index
 
 }

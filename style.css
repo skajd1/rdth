@@ -1,7 +1,7 @@
-@import url(//fonts.googleapis.com/earlyaccess/hanna.css);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 body div {
-    font-family: 'Hanna', cursive;
+    font-family: 'Roboto', sans-serif;
 }
 body span {
     color: gray;
@@ -147,10 +147,7 @@ body span {
     height : 500px;   
     
 }
-#cb3-table-body td
-{
-    background-color : white;
-}
+
 #cb3-table-body td:first-child
 {
     position : sticky; left : 0;
