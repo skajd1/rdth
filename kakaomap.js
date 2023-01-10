@@ -29,11 +29,9 @@ let marker_blue = './bluecircle.png';
 let selected = -1
  
 
-
-// 지도생성 / 나중에 함수에 넣은 뒤 AJAX Call 에서 호출하게 하면 센터 및 크기레벨 동적제어 가능
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
-        center: new kakao.maps.LatLng(37.47776614, 126.8913644), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(37,125), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 
@@ -44,7 +42,21 @@ map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 var zoomControl = new kakao.maps.ZoomControl();
 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
+function zoomIn() {        
+    // 현재 지도의 레벨을 얻어옵니다
+    var level = map.getLevel();
+    
+    // 지도를 1레벨 내립니다
+    map.setLevel(level - 1);
+}
+function zoomOut() {        
+    // 현재 지도의 레벨을 얻어옵니다
+    var level = map.getLevel();
+    
+    // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+    map.setLevel(level + 1);
 
+} 
 function get_color_SPI(num) {
     if (num <= 2) {
         return marker_red;
@@ -135,7 +147,7 @@ function deleteMarkers(marker) {
     }
 
 }
-// csv 읽는 Ajax call
+// ajax call
 $(function () {
     let fileName = "pont.csv";
     $.ajax({
@@ -160,8 +172,9 @@ $(function () {
                     ColumnData[key].push(csv_data[i][key])
                 }
             }
-            
+            let position = new kakao.maps.LatLng(parseFloat(csv_data[0].latlng[0]), parseFloat(csv_data[0].latlng[1]))
             // 여기에 함수 추가.
+            map.setCenter(position)
             createIw();
             setMarkers('radio-all');
             valueInitialize()
@@ -284,7 +297,7 @@ function selectData(selectedRow){
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
 
-
+    
     let index = selectedRow;
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
@@ -307,6 +320,10 @@ function selectData(selectedRow){
             }
         }
         document.getElementById("table-row-" + index).style = "background-color : white"
+        if(map.getLevel() <= 2)
+        {
+            zoomOut()
+        }
         selected = -1
         return
     }
@@ -325,7 +342,10 @@ function selectData(selectedRow){
             setText(csv_data[index][key][i],(key + '_' + (i+1)));
         }
     }
-
+    if(map.getLevel() >2)
+    {
+        zoomIn()
+    }
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
 
