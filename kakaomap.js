@@ -163,19 +163,11 @@ $(function () {
             
             // 여기에 함수 추가.
             createIw();
-<<<<<<< HEAD
-            createMarkers('all');
-            setDistance();
-            setText(getAvg(ColumnData.pd), "avg-pd");
-            setText(getAvg(ColumnData.roughness), "avg-rough");
-            makeTable(csv_data);
-=======
             createMarkers('radio-all');
             valueInitialize()
             makeTable(csv_data);
 
             
->>>>>>> master
         }
     });
 });
@@ -276,129 +268,6 @@ w : 분석 관심 폭 3
 */
 function makeTable(jsonData) {
 
-<<<<<<< HEAD
-    let table = document.getElementById('table1');
-
-    for(i=0; i<csv_data.length; i++){
-		let tr = document.createElement("tr");
-		
-		let td1 = document.createElement("td");			  
-		td1.appendChild(document.createTextNode(ColumnData.dist[i] + ""));
-		
-		let td2 = document.createElement("td");			 
-		td2.appendChild(document.createTextNode(ColumnData.note[i] + ""));
-		
-		let td3 = document.createElement("td");			 
-		td3.appendChild(document.createTextNode(ColumnData.w[i]+ ""));
-
-		let td4 = document.createElement("td");			 
-		td4.appendChild(document.createTextNode(ColumnData.pd[i]+ ""));
-
-        let td5 = document.createElement("td");
-        td5.appendChild(document.createTextNode(ColumnData.roughness[i] + ""));
-
-		let td6 = document.createElement("td");			 
-		td6.appendChild(document.createTextNode(ColumnData.amount_crack[i]+ ""));
-		let td7 = document.createElement("td");			 
-		td7.appendChild(document.createTextNode(ColumnData.ratio_crack[i]+ ""));
-        let td8 = document.createElement("td");			 
-		td8.appendChild(document.createTextNode(ColumnData.SPI_1[i]+ ""));
-        let td9 = document.createElement("td");			 
-		td9.appendChild(document.createTextNode(ColumnData.SPI_2[i]+ ""));
-        let td10 = document.createElement("td");			 
-		td10.appendChild(document.createTextNode(ColumnData.SPI_3[i]+ ""));
-
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-        tr.appendChild(td4);
-		tr.appendChild(td5);
-		tr.appendChild(td6);
-        tr.appendChild(td7);
-		tr.appendChild(td8);
-		tr.appendChild(td9);
-        tr.appendChild(td10);
-
-
-		table.appendChild(tr);
-	}
-
-    let table2 = document.getElementById('table2');
-
-    for(i=0; i<csv_data.length; i++){
-		let tr = document.createElement("tr");
-
-		let td100 = document.createElement("td");			  
-		td100.appendChild(document.createTextNode(ColumnData.dist[i] + ""));
-		let td200 = document.createElement("td");			 
-		td200.appendChild(document.createTextNode(ColumnData.note[i] + ""));
-		let td300 = document.createElement("td");			 
-		td300.appendChild(document.createTextNode(ColumnData.w[i]+ ""));
-		let td400 = document.createElement("td");			 
-		td400.appendChild(document.createTextNode(ColumnData.AP_L[i][0]+ ""));
-        let td500 = document.createElement("td");
-        td500.appendChild(document.createTextNode(ColumnData.AP_L[i][1] + ""));
-		let td600 = document.createElement("td");			 
-		td600.appendChild(document.createTextNode(ColumnData.AP_L[i][2]+ ""));
-		let td700 = document.createElement("td");			 
-		td700.appendChild(document.createTextNode(ColumnData.AP_T[i][0]+ ""));
-        let td800 = document.createElement("td");
-        td800.appendChild(document.createTextNode(ColumnData.AP_T[i][1] + ""));
-		let td900 = document.createElement("td");			 
-		td900.appendChild(document.createTextNode(ColumnData.AP_T[i][2]+ ""));
-        let td1000 = document.createElement("td");			 
-		td1000.appendChild(document.createTextNode(ColumnData.AP_CJ[i][0]+ ""));
-        let td1100 = document.createElement("td");
-        td1100.appendChild(document.createTextNode(ColumnData.AP_CJ[i][1] + ""));
-		let td1200 = document.createElement("td");			 
-		td1200.appendChild(document.createTextNode(ColumnData.AP_CJ[i][2]+ ""));
-        let td1300 = document.createElement("td");			 
-		td1300.appendChild(document.createTextNode(ColumnData.AP_AC[i][0]+ ""));
-        let td1400 = document.createElement("td");
-        td1400.appendChild(document.createTextNode(ColumnData.AP_AC[i][1] + ""));
-		let td1500 = document.createElement("td");			 
-		td1500.appendChild(document.createTextNode(ColumnData.AP_AC[i][2]+ ""));
-        let td1600 = document.createElement("td");			 
-		td1600.appendChild(document.createTextNode(ColumnData.AP_P[i][0]+ ""));
-        let td1700 = document.createElement("td");
-        td1700.appendChild(document.createTextNode(ColumnData.AP_P[i][1] + ""));
-		let td1800 = document.createElement("td");			 
-		td1800.appendChild(document.createTextNode(ColumnData.AP_P[i][2]+ ""));
-        let td1900 = document.createElement("td");			 
-		td1900.appendChild(document.createTextNode(ColumnData.AP_H[i][0]+ ""));
-        let td2000 = document.createElement("td");
-        td2000.appendChild(document.createTextNode(ColumnData.AP_H[i][1] + ""));
-		let td2100 = document.createElement("td");			 
-		td2100.appendChild(document.createTextNode(ColumnData.AP_H[i][2]+ ""));
-
-
-		tr.appendChild(td100);
-		tr.appendChild(td200);
-		tr.appendChild(td300);
-        tr.appendChild(td400);
-		tr.appendChild(td500);
-		tr.appendChild(td600);
-        tr.appendChild(td700);
-		tr.appendChild(td800);
-		tr.appendChild(td900);
-        tr.appendChild(td1000);
-        tr.appendChild(td1100);
-        tr.appendChild(td1200);
-        tr.appendChild(td1300);
-        tr.appendChild(td1400);
-        tr.appendChild(td1500);
-        tr.appendChild(td1600);
-        tr.appendChild(td1700);
-        tr.appendChild(td1800);
-        tr.appendChild(td1900);
-        tr.appendChild(td2000);
-        tr.appendChild(td2100);
-		table2.appendChild(tr);
-	}
-}
-=======
-function makeTable(jsonData) {
-
     let table = document.getElementById('cb3-table-body');
     let table_head = ["dist","note","w","pd","roughness","amount_crack","ratio_crack","SPI_1","SPI_2",
 "SPI_3","AP_L","AP_L","AP_L","AP_T","AP_T","AP_T","AP_CJ","AP_CJ","AP_CJ","AP_AC","AP_AC","AP_AC","AP_P","AP_P","AP_P","AP_H","AP_H","AP_H"];
@@ -415,4 +284,3 @@ function makeTable(jsonData) {
 	}
 
 }
->>>>>>> master
