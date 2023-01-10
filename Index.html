@@ -27,43 +27,46 @@
         }
     </style>
     <div class = "main">
+<<<<<<< HEAD
 
         <!-- 상태줄 -->
+=======
+>>>>>>> master
         <div class = 'selectbox' id = "select">
             <form method = "get">
                 <fieldset class = 'radiobox'>
                     <legend>도로상태유형</legend>
-                    <input class = "form-check-input" type = "radio" id = "all" name = "select_form" value ="All" checked
+                    <input class = "form-check-input" type = "radio" id = "radio-all" name = "select_form" value ="All" checked
                     onclick = 'createMarkers(event.target.id)'>
-                    <label for="all"> 전체 </label><br>
+                    <label for="radio-all"> 전체 </label><br>
                     
-                    <input class = "form-check-input" type = "radio" id = "pd" name = "select_form" value ="p"
+                    <input class = "form-check-input" type = "radio" id = "radio-pd" name = "select_form" value ="p"
                     onclick = ''>
-                    <label for="pd"> 소성변형 </label><br>
+                    <label for="radio-pd"> 소성변형 </label><br>
                 
-                    <input class = "form-check-input" type = "radio" id = "rough" name = "select_form" value ="lr"
+                    <input class = "form-check-input" type = "radio" id = "radio-rough" name = "select_form" value ="lr"
                     onclick = ''>
-                    <label for="rough"> 종단평탄성 </label><br>
+                    <label for="radio-rough"> 종단평탄성 </label><br>
                     
-                    <input class = "form-check-input" type = "radio" id = "ac" name = "select_form" value ="a"
+                    <input class = "form-check-input" type = "radio" id = "radio-ac" name = "select_form" value ="a"
                     onclick = ''>
-                    <label for="ac"> 균열량 </label><br>
+                    <label for="radio-ac"> 균열량 </label><br>
                     
-                    <input class = "form-check-input" type = "radio" id = "rc" name = "select_form" value ="r"
+                    <input class = "form-check-input" type = "radio" id = "radio-rc" name = "select_form" value ="r"
                     onclick = ''>
-                    <label for="rc"> 균열율 </label><br>
+                    <label for="radio-rc"> 균열율 </label><br>
                     
-                    <input class = "form-check-input" type = "radio" id = "SPI1" name = "select_form" value ="spi1"
+                    <input class = "form-check-input" type = "radio" id = "radio-SPI1" name = "select_form" value ="spi1"
                     onclick = 'createMarkers(event.target.id)'>
-                    <label for="SPI1"> 도시고속도로 </label><br>
+                    <label for="radio-SPI1"> 도시고속도로 </label><br>
                 
-                    <input class = "form-check-input" type = "radio" id = "SPI2" name = "select_form" value ="spi2"
+                    <input class = "form-check-input" type = "radio" id = "radio-SPI2" name = "select_form" value ="spi2"
                     onclick = 'createMarkers(event.target.id)'>
-                    <label for="SPI2"> 주간선도로 </label><br>
+                    <label for="radio-SPI2"> 주간선도로 </label><br>
                     
-                    <input class = "form-check-input" type = "radio" id = "SPI3" name = "select_form" value ="spi3"
+                    <input class = "form-check-input" type = "radio" id = "radio-SPI3" name = "select_form" value ="spi3"
                     onclick = 'createMarkers(event.target.id)'>
-                    <label for="SPI3"> 보조간선도로 </label><br>            
+                    <label for="radio-SPI3"> 보조간선도로 </label><br>            
                     
                 </fieldset>
             </form>
@@ -73,6 +76,9 @@
                 <input type="text" id="amount" readonly style="border:0;width : 150px; text-align:center">
                 <div style = "text-align : center; width : 150px; margin : 0 auto">
                     <div style = "width : 120px; margin : 0 auto;"id="slider-range"></div>
+                </div>
+                <div class = 'category-color-box'>
+                    category
                 </div>
             </div>
         </div>
@@ -102,35 +108,127 @@
 
         <!-- html&chart&grid -->
         <div class = "chartbox">
+<<<<<<< HEAD
             <!-- html -->
+=======
+
+>>>>>>> master
             <div class = "cb1">
+
                 <div class = "cb1-distance">
-                    총거리 : <span id = "distance"></span> km
+                    총거리 : <span id = "dist"></span> km
                 </div>
+
                 <div class = "cb1-deformation">
                     <div>
-                        평균 소성변형 : <span id = "avg-pd"></span>
+                        평균 소성변형 : <span id = "pd"></span>
                     </div>
                     <div>
-                        평균 종단평탄성 : <span id = "avg-rough"></span>
+                        평균 종단평탄성 : <span id = "roughness"></span>
                     </div>
                 </div>
+
                 <div class = "cb1-crack" >
-                    평균 균열 :<span></span>(단위)
+                    <div>
+                        평균 균열량: <span id = "amount_crack"></span>
+                    </div>
+                    <div>
+                        평균 균열율:<span id = "ratio_crack"></span>
+                    </div>
                 </div>
-                <div class = "cb1-SPI">
-                    SPI지수 :<span></span>(단위)
+
+                <div class = "cb1-SPI" style = "padding-top : 50px">
+                    <span>SPI</span>
+                    <div>
+                        도시고속도로: <span id = "SPI_1"></span>
+                    </div>
+                    <div>
+                        주간선도로: <span id ="SPI_2"></span>
+                    </div>
+                    <div>
+                        보조간선도로: <span id ="SPI_3"></span>
+                    </div>
                 </div>
             </div>
+<<<<<<< HEAD
             <!-- chart -->
+=======
+ 
+>>>>>>> master
             <div class = "cb2">
-                <div class = "cb2-AP-L">AP종</div>
-                <div class = "cb2-AP-T">AP횡</div>
-                <div class = "cb2-AP-CJ">AP시공줄눈</div>
-                <div class = "cb2-AP-AC">AP거북등</div>
-                <div class = "cb2-AP-P">AP패칭</div>
-                <div class = "cb2-AP-H">AP포트홀</div>
+                <div class = "cb2-AP-L">
+                    <div >
+                        L  : <span id = "AP_L_1"></span>
+                    </div>
+                    <div >
+                        M : <span id = "AP_L_2"></span>
+                    </div>
+                    <div>
+                        H : <span id = "AP_L_3"></span>
+                    </div>
+
+                </div>
+                <div class = "cb2-AP-T">
+                    <div>
+                        L : <span id = "AP_T_1"></span>
+                    </div>
+                    <div>
+                        M : <span id = "AP_T_2"></span>
+                    </div>
+                    <div>
+                        H : <span id = "AP_T_3"></span>
+                    </div>
+
+                </div>
+                <div class = "cb2-AP-CJ">
+                    <div>
+                        L : <span id = "AP_CJ_1"></span>
+                    </div>
+                    <div>
+                        M : <span id = "AP_CJ_2"></span>
+                    </div>
+                    <div>
+                        H : <span id = "AP_CJ_3"></span>
+                    </div>
+
+                </div>
+                <div class = "cb2-AP-AC">
+                    <div>
+                        L : <span id = "AP_AC_1"></span>
+                    </div>
+                    <div>
+                        M : <span id = "AP_AC_2"></span>
+                    </div>
+                    <div >
+                        H : <span id = "AP_AC_3"></span>
+                    </div>
+                </div>
+                <div class = "cb2-AP-P">
+                    <div>
+                        L : <span id = "AP_P_1"></span>
+                    </div>
+                    <div >
+                        M : <span id = "AP_P_2"></span>
+                    </div>
+                    <div >
+                        H : <span id = "AP_P_3"></span>
+                    </div>
+
+                </div>
+                <div class = "cb2-AP-H">
+                    <div>
+                        L : <span id = "AP_H_1"></span>
+                    </div>
+                    <div >
+                        M : <span id = "AP_H_2"></span>
+                    </div>
+                    <div>
+                        H : <span id = "AP_H_3"></span>
+                    </div>
+
+                </div>
             </div>
+<<<<<<< HEAD
             <!-- grid -->
             <div class = "cb3">
                 <table border='2' width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -140,12 +238,24 @@
                             <th>비고</th>
                             <th>분석 관심 폭</th>
                             <th>소성변형 직선지</th>
+=======
+
+            <div class = "cb3" >
+                <table cellspacing="1px" cellpadding="1px">
+                    <thead id = "cb3-table-head">
+                        <tr>
+                            <th>거리</th>
+                            <th style = "margin-left : 10px; margin-right : 10px;">비고</th>
+                            <th>관심 폭</th>
+                            <th>소성변형</th>
+>>>>>>> master
                             <th>종단평탄성 평균</th>
                             <th>균열량</th>
                             <th>균열율</th>
                             <th>도시고속도로</th>
                             <th>주간선도로</th>
                             <th>보조간선도로</th>
+<<<<<<< HEAD
                         </tr>
                     </thead>
                     <tbody id="table1">
@@ -181,6 +291,30 @@
                         </tr>
                     </thead>
                     <tbody id="table2">
+=======
+                            <th>AP 종방향균열 L</th>
+                            <th>AP 종방향균열 M</th>
+                            <th>AP 종방향균열 H</th>
+                            <th>AP L</th>
+                            <th>AP M</th>
+                            <th>AP H</th>
+                            <th>AP L</th>
+                            <th>AP M</th>
+                            <th>AP H</th>
+                            <th>AP L</th>
+                            <th>AP M</th>
+                            <th>AP H</th>
+                            <th>AP L</th>
+                            <th>AP M</th>
+                            <th>AP H</th>
+                            <th>AP L</th>
+                            <th>AP M</th>
+                            <th>AP H</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id = "cb3-table-body">
+>>>>>>> master
 
                     </tbody>
 

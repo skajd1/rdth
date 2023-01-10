@@ -97,10 +97,10 @@ function createMarkers(select) {
 
         let markercolor =
         {
-            "all": marker_blue,
-            "SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-            "SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-            "SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+            "radio-all": marker_blue,
+            "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+            "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+            "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
         }
 
         let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
@@ -163,11 +163,19 @@ $(function () {
             
             // 여기에 함수 추가.
             createIw();
+<<<<<<< HEAD
             createMarkers('all');
             setDistance();
             setText(getAvg(ColumnData.pd), "avg-pd");
             setText(getAvg(ColumnData.roughness), "avg-rough");
             makeTable(csv_data);
+=======
+            createMarkers('radio-all');
+            valueInitialize()
+            makeTable(csv_data);
+
+            
+>>>>>>> master
         }
     });
 });
@@ -187,16 +195,49 @@ $( function() {
   });
 
 
+function valueInitialize()
+{   
+    for(let key of Object.keys(csv_data[0]))
+    {
+        if (key ==='w' || key ==='note' || key === 'status_img' || key === 'surf_img' || key === 'latlng')
+        {
+            continue;
+        }
+        else if (key === 'dist')
+        {
+            setText(getSum(ColumnData.dist).toFixed(3),"dist");
+        }
+        else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
+        {
+            
+            for(let j = 0 ; j < 3 ; j ++)
+            {   
+                let id = key+"_"+(j+1)
+                let sum = 0;
+                for(let i = 0 ; i < csv_data.length; i++)
+                {
+                    sum += parseFloat(ColumnData[key][i][j]);
+                }
+                setText(sum.toFixed(3),id)
+            }     
+        }
+        else
+        {
+            setText(getAvg(ColumnData[key]).toFixed(3),key)
+        }
 
+    }
 
-function setDistance()
+}
+
+function getSum(data_array)
 {   
     let sum = 0;
     for(let i = 0 ; i < csv_data.length ; i ++)
     {
-        sum += parseFloat(ColumnData.dist[i])
+        sum += parseFloat(data_array[i])
     }
-    document.getElementById("distance").innerText = sum
+    return sum;
 }
 function getAvg(data_array)
 {
@@ -206,7 +247,7 @@ function getAvg(data_array)
     {
         sum += parseFloat(data_array[i])
     }
-    return sum / csv_data.length ;
+    return (sum / csv_data.length) ;
 }
 function setText(value, ID)
 {
@@ -235,6 +276,7 @@ w : 분석 관심 폭 3
 */
 function makeTable(jsonData) {
 
+<<<<<<< HEAD
     let table = document.getElementById('table1');
 
     for(i=0; i<csv_data.length; i++){
@@ -354,3 +396,23 @@ function makeTable(jsonData) {
 		table2.appendChild(tr);
 	}
 }
+=======
+function makeTable(jsonData) {
+
+    let table = document.getElementById('cb3-table-body');
+    let table_head = ["dist","note","w","pd","roughness","amount_crack","ratio_crack","SPI_1","SPI_2",
+"SPI_3","AP_L","AP_L","AP_L","AP_T","AP_T","AP_T","AP_CJ","AP_CJ","AP_CJ","AP_AC","AP_AC","AP_AC","AP_P","AP_P","AP_P","AP_H","AP_H","AP_H"];
+
+    for(i=0; i<csv_data.length; i++){
+		let tr = document.createElement("tr");
+        for (let head of table_head)
+        {
+            let td = document.createElement("td")
+            td.appendChild(document.createTextNode(ColumnData[head][i]+ ""));
+            tr.appendChild(td)
+        }
+		table.appendChild(tr);
+	}
+
+}
+>>>>>>> master
