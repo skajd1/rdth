@@ -195,6 +195,7 @@ $(function () {
         " - " + $("#slider-range").slider("values", 1));
 });
 
+var myChart ={};
 
 function valueInitialize() {
     for (let key of Object.keys(csv_data[0])) {
@@ -215,7 +216,8 @@ function valueInitialize() {
                 dataSetObj.push(sum);
                 //setText(sum.toFixed(3), id)
             }
-            makeChart(key, dataSetObj);
+            
+            myChart[key] = new Chart(key+'_Chart', makeChartData(dataSetObj));
         }
         else {
             setText(getAvg(ColumnData[key]).toFixed(3), key)
@@ -313,11 +315,19 @@ function selectData(selectedRow) {
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
     document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)" // 행 강조
+    
+    //------------------ 여기에 클릭 시 차트 변경 시도. --------------------- //
+   
     for (let key of keys) {
+        removeData(myChart[key]);
+        label = ['L','M','H'];
         for (let i = 0; i < 3; i++) {
-            setText(csv_data[index][key][i], (key + '_' + (i + 1)));
-        }
+           
+            //setText(csv_data[index][key][i], (key + '_' + (i + 1)));
+            addData(myChart[key],label[i],csv_data[index][key][i]);
+        }   
     }
+
     if (map.getLevel() > 2) {
         zoomIn()
     }
@@ -327,10 +337,10 @@ function selectData(selectedRow) {
 }
 
 
-function makeChart(getId, dataArry) {
-    const ctx = document.getElementById(getId + '_Chart');
+function makeChartData(dataArry) {
 
-    var myChart = new Chart(ctx, {
+
+    return {
         type: 'bar',
         data: {
             labels: ['L', 'M', 'H'],
@@ -359,5 +369,29 @@ function makeChart(getId, dataArry) {
                 }]
             }
         }
+    }
+}
+
+// function setChart(key, index){
+//     myChart[key].data.datasets[0].data = [];
+//     myChart[key].data.datasets[0].data = index;
+// }
+
+function removeData(chart) {
+    chart.data.labels.pop();
+    chart.data.labels.pop();
+    chart.data.labels.pop();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+        dataset.data.pop();
+        dataset.data.pop();
     });
+    chart.update();
+}
+function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    chart.update();
 }
