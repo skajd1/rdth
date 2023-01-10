@@ -201,7 +201,7 @@ function valueInitialize()
         }
         else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
         {
-            
+            let dataSumObj = []
             for(let j = 0 ; j < 3 ; j ++)
             {   
                 let id = key+"_"+(j+1)
@@ -210,8 +210,10 @@ function valueInitialize()
                 {
                     sum += parseFloat(ColumnData[key][i][j]);
                 }
-                setText(sum.toFixed(3),id)
-            }     
+                dataSumObj.push(sum);
+            }
+            // Chart 만들기
+            makeChart(key, dataSumObj);
         }
         else
         {
@@ -308,4 +310,42 @@ function selectData(selectedRow){
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
 
+}
+
+function makeChart(getId, dataSet){
+    /** getId(id)와 dataSet(array)를 받아 Chart를 생성하는 함수. */
+    var ctx = document.getElementById(getId+'_Chart');
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['L','M','H'],
+            datasets: [{
+                label: '# of Votes',
+                data: dataSet,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
 }
