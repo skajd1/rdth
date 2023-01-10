@@ -160,7 +160,8 @@ $(function () {
                     ColumnData[key].push(csv_data[i][key])
                 }
             }
-                
+            
+            // 여기에 함수 추가.
             createIw();
             createMarkers('radio-all');
             valueInitialize()
@@ -170,7 +171,6 @@ $(function () {
         }
     });
 });
-
 
 $( function() {
     $( "#slider-range" ).slider({
@@ -233,6 +233,7 @@ function getSum(data_array)
 }
 function getAvg(data_array)
 {
+    /*data_array(type:array) 받아들여 return 값으로 평균을 내주는 함수*/
     let sum = 0;
     for(let i = 0; i < csv_data.length; i ++)
     {
@@ -242,9 +243,29 @@ function getAvg(data_array)
 }
 function setText(value, ID)
 {
+    /* value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
+    */
     document.getElementById(ID).innerText = value
 }
-
+/* 딕셔너리 형태로 csv 데이터 속성 기반 정리, 각 value들은 str이므로 사용 시 형변환 필요
+dist : 거리 1
+status_img : 도로현황
+surf_img : 도로표면
+pd : 소성변형 (plastic deformation) 4
+roughness : 종단평탄성 5 
+latlng : 위도 , 경도
+amount_crack : 균열량 6
+ratio_crack : 균열율 7
+SPI_1,2,3 : 도시고속도로, 주간선도로,보조간선도로 8 9 10
+AP_L : 종방향균열(longitude) // 각 L M H 순 4 5 6
+AP_T : 횡방향균열(transverse) 7 8 9
+AP_CJ : 시공줄눈(construction joint) 10 11 12
+AP_AC : 거북등균열 (Aligator crack) 13 14 15
+AP_P : 패칭 16 17 18
+AP_H : 포트홀 19 20 21
+note : 비고 2
+w : 분석 관심 폭 3
+*/
 function makeTable(jsonData) {
 
     let table = document.getElementById('cb3-table-body');
