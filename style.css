@@ -126,24 +126,56 @@ body span {
 .cb3{
     margin-right : 10px;
     margin-top : 5px;
-    border : 1px groove;
     height : 54%;
     overflow : auto;
     white-space: nowrap;
+    border : 1px solid;
+}
+.cb3 table{
+    border-spacing: 0;
+    border-collapse: separate;
 }
 #cb3-table-head{
     height : 60px;
     position: sticky;
     top: 0px;
-    background-color: darkgrey;
+    background-color: #cecdcd;
+    z-index: 1;
+    
 }
 #cb3-table-body{
-    height : 500px;
+    height : 500px;   
+    
+}
+#cb3-table-body td
+{
+    background-color : white;
+}
+#cb3-table-body td:first-child
+{
+    position : sticky; left : 0;
+    background-color : #cecdcd;
 }
 th{
-
-    padding-right : 15px;
+    padding-left: 23px;
+    padding-right: 23px;
+    
 }
 tr{
-    width : 1000px;
+    text-align : center;
+}
+.cb3 td{
+    border-top : 1px groove;
+    border-right : 1px groove;
+    border-bottom : 1px groove;
+
+}
+.cb3 th{
+    border-right : 1px groove;
+    border-bottom : 1px groove;
+
+}
+.cb3 th:nth-child(2)
+{
+    margin-left : 10px; margin-right : 10px;
 }

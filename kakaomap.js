@@ -83,7 +83,7 @@ function deleteIw(iws) {
         }
     }
 }
-function createMarkers(select) {
+function setMarkers(select) {
 
     deleteIw(infoWindows)
     deleteMarkers(marker)
@@ -116,11 +116,12 @@ function createMarkers(select) {
 
         // 클릭 리스너, 다른 차트와 연동할 때 사용
         kakao.maps.event.addListener(marker[i], 'click', function () {
-            deleteIw(infoWindows)
-            infoWindows[i].open(map, marker[i]); // 클릭할 때 인포 윈도우 생성
-            document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
-            document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-            map.setCenter(position) // 선택한 마커 중심으로 맵 이동
+            // deleteIw(infoWindows)
+            // infoWindows[i].open(map, marker[i]); // 클릭할 때 인포 윈도우 생성
+            // document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
+            // document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
+            // map.setCenter(position) // 선택한 마커 중심으로 맵 이동
+            selectData(i)
         }
         );
     }
@@ -133,8 +134,6 @@ function deleteMarkers(marker) {
     }
 
 }
-
-
 // csv 읽는 Ajax call
 $(function () {
     let fileName = "pont.csv";
@@ -163,9 +162,9 @@ $(function () {
             
             // 여기에 함수 추가.
             createIw();
-            createMarkers('radio-all');
+            setMarkers('radio-all');
             valueInitialize()
-            makeTable(csv_data);
+            makeTable();
 
             
         }
@@ -247,33 +246,17 @@ function setText(value, ID)
     */
     document.getElementById(ID).innerText = value
 }
-/* 딕셔너리 형태로 csv 데이터 속성 기반 정리, 각 value들은 str이므로 사용 시 형변환 필요
-dist : 거리 1
-status_img : 도로현황
-surf_img : 도로표면
-pd : 소성변형 (plastic deformation) 4
-roughness : 종단평탄성 5 
-latlng : 위도 , 경도
-amount_crack : 균열량 6
-ratio_crack : 균열율 7
-SPI_1,2,3 : 도시고속도로, 주간선도로,보조간선도로 8 9 10
-AP_L : 종방향균열(longitude) // 각 L M H 순 4 5 6
-AP_T : 횡방향균열(transverse) 7 8 9
-AP_CJ : 시공줄눈(construction joint) 10 11 12
-AP_AC : 거북등균열 (Aligator crack) 13 14 15
-AP_P : 패칭 16 17 18
-AP_H : 포트홀 19 20 21
-note : 비고 2
-w : 분석 관심 폭 3
-*/
-function makeTable(jsonData) {
+
+function makeTable() {
 
     let table = document.getElementById('cb3-table-body');
     let table_head = ["dist","note","w","pd","roughness","amount_crack","ratio_crack","SPI_1","SPI_2",
 "SPI_3","AP_L","AP_L","AP_L","AP_T","AP_T","AP_T","AP_CJ","AP_CJ","AP_CJ","AP_AC","AP_AC","AP_AC","AP_P","AP_P","AP_P","AP_H","AP_H","AP_H"];
 
-    for(i=0; i<csv_data.length; i++){
+    for(let i=0; i<csv_data.length; i++){
 		let tr = document.createElement("tr");
+        tr.id = 'table-row-' + i
+
         count = 0
         for (let head of table_head)
         {
@@ -290,6 +273,53 @@ function makeTable(jsonData) {
             }
         }
 		table.appendChild(tr);
+        tr.addEventListener('click', function(){
+            selectData(i)       
+        })
 	}
+
+}
+
+function selectData(selectedRow){
+    //기존 선택되었던 컬럼 선택 해제,
+    //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
+
+
+    let index = selectedRow;
+    let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
+    let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
+    let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
+    deleteIw(infoWindows)
+    infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
+    document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
+    document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
+    for (let i = 0; i < csv_data.length; i++)
+    {
+        document.getElementById("table-row-" + i).style = "background-color : white"
+    }
+    document.getElementById("table-row-" + index).style = "background-color : #A0A0C8"
+    map.setCenter(position) // 선택한 마커 중심으로 맵 이동
+
+}
+
+function selectData(selectedRow){
+    //기존 선택되었던 컬럼 선택 해제,
+    //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
+
+
+    let index = selectedRow;
+    let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
+    let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
+    let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
+    deleteIw(infoWindows)
+    infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
+    document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
+    document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
+    for (let i = 0; i < csv_data.length; i++)
+    {
+        document.getElementById("table-row-" + i).style = "background-color : white"
+    }
+    document.getElementById("table-row-" + index).style = "background-color : #A0A0C8"
+    map.setCenter(position) // 선택한 마커 중심으로 맵 이동
 
 }
