@@ -27,6 +27,7 @@ let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
+let chart = {}
  
 
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
@@ -210,21 +211,25 @@ function valueInitialize()
         }
         else if (key === 'dist')
         {
-            setText(getSum(ColumnData.dist).toFixed(3),"dist");
+            setText(parseFloat(ColumnData.dist[csv_data.length-1]).toFixed(3) + " km","dist");
         }
         else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
-        {
+        {   
+            let sum = [0,0,0]
             
             for(let j = 0 ; j < 3 ; j ++)
             {   
                 let id = key+"_"+(j+1)
-                let sum = 0;
+                
                 for(let i = 0 ; i < csv_data.length; i++)
                 {
-                    sum += parseFloat(ColumnData[key][i][j]);
+                    sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
-                setText(sum.toFixed(3),id)
-            }     
+                setText(sum[j].toFixed(3),id)
+                console.log(sum)
+            }   
+
+            //chart[key] = new Chart(data = sum[0],sum[1],sum[2]~~)
         }
         else
         {
@@ -293,6 +298,12 @@ function makeTable() {
 
 }
 
+
+function setChart(index, key)
+{
+    //chart[key].data = ColumnData[key][index][0,1,2]
+}
+
 function selectData(selectedRow){
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
@@ -302,8 +313,9 @@ function selectData(selectedRow){
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
     let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
-    let keys = ['AP_L', 'AP_T', 'AP_CJ','AP_AC','AP_P','AP_H'];
+    let keys = ['AP_L','AP_T','AP_CJ','AP_AC','AP_P','AP_H'];
     deleteIw(infoWindows)
+    // 선택된 행을 다시 눌렀을 때
     if (selected === index)
     {
         for(let key of keys)
@@ -341,6 +353,7 @@ function selectData(selectedRow){
         {
             setText(csv_data[index][key][i],(key + '_' + (i+1)));
         }
+        //setChart(index,key);
     }
     if(map.getLevel() >2)
     {

@@ -6,7 +6,7 @@ body div {
 body span {
     color: gray;
 }
-.cb1-SPI span{
+.cb1-SPI div{
     color: black;
 }
 .cb1-SPI div span{
@@ -19,7 +19,7 @@ body span {
     display : flex;
 }
 .selectbox{
-    border : 1px groove;
+    border : 1px ridge;
     width : 180px; 
     position : relative; left : 10px; top : 10px;
 }
@@ -34,7 +34,7 @@ body span {
 .category-color-box{
     
     height : 200px;
-    border : 1px groove;
+    border : 1px ridge;
     margin-top : 20px;
     margin-left : 10px;
     margin-right : 10px;
@@ -48,7 +48,7 @@ body span {
     height:550px; 
 }
 .imagebox{
-    border : 1px groove;
+    border : 1px ridge;
     margin-top : 10px;
     display : flex;
 }
@@ -79,8 +79,12 @@ body span {
 
 /** class cb1 - html 1, 2, 3, 4 */
 .cb1{
+    font-weight : 500;
     height : 180px;
     display : flex;
+}
+.cb1 span{
+    font-weight : 600;
 }
 .cb1 > *{
     border : 1px groove;
@@ -97,16 +101,67 @@ body span {
 }
 
 .cb1-distance {
-    font-size: 2.5em;
+    font-size: 2.0em;
+    
 }
 .cb1-deformation {
-    font-size: 2.0em;
+    font-size: 1.25em;
+    font-weight : bolder;
+}
+.cb1-deformation > *{
+    margin : auto 0;
+}
+.cb1-deformation-content1{
+    display:flex;
+}
+.cb1-deformation-content2{
+    display:flex;
+}
+.cb1-deformation-content1 >* {
+    margin-right : 15px
+}
+.cb1-deformation-content2 >* {
+    margin-right : 10px
 }
 .cb1-crack {
-    font-size: 2.0em;
+    font-size: 1.4em;
+    font-weight : 600;
+}
+.cb1-crack > *{
+    margin : auto 0;
+}
+.cb1-crack-content1{
+    display : flex;
+}
+.cb1-crack-content1 > *{
+    margin-right : 25px;
+}
+.cb1-crack-content2{
+    display : flex;
+}
+.cb1-crack-content2 > *{
+    margin-right : 25px;
 }
 .cb1-SPI{
     font-size: 1.5em;
+}
+.cb1-SPI-content1{
+    display : flex;
+}
+.cb1-SPI-content1 >*{
+    margin-right : 20px
+}
+.cb1-SPI-content2{
+    display : flex;
+}
+.cb1-SPI-content2 >*{
+    margin-right : 20px
+}
+.cb1-SPI-content3{
+    display : flex;
+}
+.cb1-SPI-content3 >*{
+    margin-right : 20px
 }
 
 /** class cb2 - chart 1, 2, 3*/
@@ -139,7 +194,7 @@ body span {
     height : 60px;
     position: sticky;
     top: 0px;
-    background-color: #cecdcd;
+    background-color: #e7e5e5;
     z-index: 1;
     
 }
@@ -151,7 +206,7 @@ body span {
 #cb3-table-body td:first-child
 {
     position : sticky; left : 0;
-    background-color : #cecdcd;
+    background-color : #e7e5e5;
 }
 th{
     padding-left: 23px;

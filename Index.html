@@ -14,7 +14,6 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <script src = "./node_modules/chart.js/dist/chart.js"></script>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
           <span class="navbar-brand mb-0 h1">로드텍</span>
@@ -111,37 +110,39 @@
             <!-- cb1 - html -->
             <div class = "cb1">
                 <div class = "cb1-distance">
-                    <div>총거리 : <span id = "dist"></span> km</div>
+                    <div>총거리 </div> <span style = "margin-left : 10px; margin-top : 20px;"id = "dist"></span>
                 </div>
 
                 <div class = "cb1-deformation">
-                    <div>
-                        평균 소성변형 : <span id = "pd"></span>
+                    <div class = "cb1-deformation-content1">
+                        <div>평균 소성변형(mm)</div> <span id = "pd"></span>
                     </div>
-                    <div>
-                        평균 종단평탄성 : <span id = "roughness"></span>
+                    <div class = "cb1-deformation-content2">
+                        <div>평균 종단평탄성(m/km)</div><span id = "roughness"></span>
                     </div>
                 </div>
 
                 <div class = "cb1-crack" >
-                    <div>
-                        평균 균열량: <span id = "amount_crack"></span>
+                    <div class =  "cb1-crack-content1">
+                        <div>평균 균열량(m²)</div><span id = "amount_crack"></span>
                     </div>
-                    <div>
-                        평균 균열율:<span id = "ratio_crack"></span>
+                    <div class =  "cb1-crack-content2">
+                        <div>평균 균열율(%)</div><span id = "ratio_crack"></span>
                     </div>
                 </div>
 
                 <div class = "cb1-SPI">
-                    <span style = "font-weight : border">SPI</span>
-                    <div>
-                        도시고속도로: <span id = "SPI_1"></span>
-                    </div>
-                    <div>
-                        주간선도로: <span id ="SPI_2"></span>
-                    </div>
-                    <div>
-                        보조간선도로: <span id ="SPI_3"></span>
+                    <div style = "display : flex;"><div>평균</div> <div style = "font-weight : bold"> SPI</div></div>
+                    <div class = "cb1-SPI-content-box">
+                        <div class = "cb1-SPI-content1">
+                            <div>도시고속도로</div><span id = "SPI_1"></span>
+                        </div>
+                        <div class = "cb1-SPI-content2">
+                            <div>주간선도로</div><span id ="SPI_2"></span>
+                        </div>
+                        <div class = "cb1-SPI-content3">
+                            <div>보조간선도로</div><span id ="SPI_3"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -226,11 +227,11 @@
                         <tr>
                             <th rowspan = '2'>거리</th>
                             <th rowspan = '2'>비고</th>
-                            <th rowspan = '2'>분석 폭</th>
-                            <th rowspan = '2'>소성변형</th>
-                            <th rowspan = '2'>종단평탄성</th>
-                            <th rowspan = '2'>균열량</th>
-                            <th rowspan = '2'>균열율</th>
+                            <th rowspan = '2'>분석 폭(m)</th>
+                            <th rowspan = '2'>소성변형(mm)</th>
+                            <th rowspan = '2'>종단평탄성(m/km)</th>
+                            <th rowspan = '2'>균열량(m²)</th>
+                            <th rowspan = '2'>균열율(%)</th>
                             <th rowspan = '2'>도시고속도로</th>
                             <th rowspan = '2'>주간선도로</th>
                             <th rowspan = '2'>보조간선도로</th>
@@ -311,9 +312,6 @@
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=649875af421ea126bd6af75263cc7e9b"></script>
     <script type="text/javascript" src="./kakaomap.js"> </script>
-    <script type="text/javascript">
-        
-    </script>
 
 </body>
 </html>
