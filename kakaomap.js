@@ -53,7 +53,7 @@ function zoomOut() {
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
-    // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+    // 지도를 1레벨 올립니다 (지도가 확대됩니다)
     map.setLevel(level + 1);
 
 }
@@ -214,9 +214,7 @@ function valueInitialize() {
                     sum += parseFloat(ColumnData[key][i][j]);
                 }
                 dataSetObj.push(sum);
-                //setText(sum.toFixed(3), id)
-            }
-            
+            }            
             myChart[key] = new Chart(key+'_Chart', makeChartData(dataSetObj));
         }
         else {
@@ -315,15 +313,12 @@ function selectData(selectedRow) {
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
     document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)" // 행 강조
-    
-    //------------------ 여기에 클릭 시 차트 변경 시도. --------------------- //
    
+    // 선택시 chart 생성하는 for문
     for (let key of keys) {
         removeData(myChart[key]);
         label = ['L','M','H'];
         for (let i = 0; i < 3; i++) {
-           
-            //setText(csv_data[index][key][i], (key + '_' + (i + 1)));
             addData(myChart[key],label[i],csv_data[index][key][i]);
         }   
     }
@@ -337,16 +332,18 @@ function selectData(selectedRow) {
 }
 
 
-function makeChartData(dataArry) {
-
-
+function makeChartData(dataArr) {
+    /** 차트 생성 함수의 파라미터를 만드는 함수. 
+     * 파라미터: dataArr(array)를 받아들임
+     * return : object
+     */
     return {
         type: 'bar',
         data: {
             labels: ['L', 'M', 'H'],
             datasets: [{
                 label: '# of Votes',
-                data: dataArry,
+                data: dataArr,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -372,10 +369,6 @@ function makeChartData(dataArry) {
     }
 }
 
-// function setChart(key, index){
-//     myChart[key].data.datasets[0].data = [];
-//     myChart[key].data.datasets[0].data = index;
-// }
 
 function removeData(chart) {
     chart.data.labels.pop();
