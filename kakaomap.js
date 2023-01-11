@@ -27,7 +27,8 @@ let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
-
+let chart = {}
+ 
 
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
@@ -202,16 +203,21 @@ function valueInitialize() {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
             continue;
         }
-        else if (key === 'dist') {
-            setText(getSum(ColumnData.dist).toFixed(3), "dist");
+        else if (key === 'dist')
+        {
+            setText(parseFloat(ColumnData.dist[csv_data.length-1]).toFixed(3) + " km","dist");
         }
-        else if (key === 'AP_L' || key === 'AP_T' || key === 'AP_CJ' || key === 'AP_AC' || key === 'AP_P' || key === 'AP_H') {
-            let dataSetObj = []
-            for (let j = 0; j < 3; j++) {
-                let id = key + "_" + (j + 1)
-                let sum = 0;
-                for (let i = 0; i < csv_data.length; i++) {
-                    sum += parseFloat(ColumnData[key][i][j]);
+        else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
+        {   
+            let sum = [0,0,0]
+            
+            for(let j = 0 ; j < 3 ; j ++)
+            {   
+                let id = key+"_"+(j+1)
+                
+                for(let i = 0 ; i < csv_data.length; i++)
+                {
+                    sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
                 dataSetObj.push(sum);
             }            
@@ -276,7 +282,13 @@ function makeTable() {
 
 }
 
-function selectData(selectedRow) {
+
+function setChart(index, key)
+{
+    //chart[key].data = ColumnData[key][index][0,1,2]
+}
+
+function selectData(selectedRow){
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
 
@@ -285,12 +297,16 @@ function selectData(selectedRow) {
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
     let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
-    let keys = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
+    let keys = ['AP_L','AP_T','AP_CJ','AP_AC','AP_P','AP_H'];
     deleteIw(infoWindows)
-    if (selected === index) {
-        for (let key of keys) {
-            for (let i = 0; i < 3; i++) {
-                let id = key + "_" + (i + 1)
+    // 선택된 행을 다시 눌렀을 때
+    if (selected === index)
+    {
+        for(let key of keys)
+        {
+            for(let i = 0; i < 3 ; i++)
+            {
+                let id = key+"_"+(i+1)
                 let sum = 0;
                 for (let j = 0; j < csv_data.length; j++) {
                     sum += parseFloat(ColumnData[key][j][i]);
