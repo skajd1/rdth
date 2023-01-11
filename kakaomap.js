@@ -210,18 +210,14 @@ function valueInitialize() {
         else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
         {   
             let sum = [0,0,0]
-            
+
             for(let j = 0 ; j < 3 ; j ++)
-            {   
-                let id = key+"_"+(j+1)
-                
-                for(let i = 0 ; i < csv_data.length; i++)
-                {
+            {             
+                for(let i = 0 ; i < csv_data.length; i++){
                     sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
-                dataSetObj.push(sum);
-            }            
-            myChart[key] = new Chart(key+'_Chart', makeChartData(dataSetObj));
+            }
+            myChart[key] = new Chart(key+'_Chart', makeChartData(sum));
         }
         else {
             setText(getAvg(ColumnData[key]).toFixed(3), key)
@@ -288,10 +284,10 @@ function setChart(index, key)
     //chart[key].data = ColumnData[key][index][0,1,2]
 }
 
+
 function selectData(selectedRow){
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
-
 
     let index = selectedRow;
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
@@ -302,22 +298,28 @@ function selectData(selectedRow){
     // 선택된 행을 다시 눌렀을 때
     if (selected === index)
     {
+        // chart 부분
         for(let key of keys)
         {
-            for(let i = 0; i < 3 ; i++)
+            removeData(myChart[key]);   // 기존 데이터 지움
+            let sum = [0,0,0]
+            label = ['L','M','H'];
+            for(let i = 0; i < 3 ; i++) // 데이터 다시 체워넣기
             {
-                let id = key+"_"+(i+1)
-                let sum = 0;
                 for (let j = 0; j < csv_data.length; j++) {
-                    sum += parseFloat(ColumnData[key][j][i]);
+                    sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
-                setText(sum.toFixed(3), id)
-            }
+                console.log(sum);
+                addData(myChart[key],label[i],sum[i]);
+            }  
         }
+
+
         document.getElementById("table-row-" + index).style = "background-color : white"
         if (map.getLevel() <= 2) {
             zoomOut()
         }
+
         selected = -1
         return
     }
@@ -344,7 +346,6 @@ function selectData(selectedRow){
     }
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
-
 }
 
 
@@ -387,6 +388,7 @@ function makeChartData(dataArr) {
 
 
 function removeData(chart) {
+    /** 기존에 저장된 차트의 라벨과 데이터를 지우는 함수 */
     chart.data.labels.pop();
     chart.data.labels.pop();
     chart.data.labels.pop();
@@ -398,6 +400,7 @@ function removeData(chart) {
     chart.update();
 }
 function addData(chart, label, data) {
+    /** 기존에 저장된 차트에 데이터를 추가하는 함수 */
     chart.data.labels.push(label);
     chart.data.datasets.forEach((dataset) => {
         dataset.data.push(data);
