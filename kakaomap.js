@@ -106,15 +106,15 @@ function setMarkers(select) {
 
     let markerSize = new kakao.maps.Size(10, 10);
 
-    for (let i = 0; i < csv_data.length; i++) {
+    for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
         let markercolor =
         {
-            "radio-all": marker_blue,
-            "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-            "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-            "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+            "all": marker_blue,
+            "SPI_1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+            "SPI_2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+            "SPI_3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
         }
 
         let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
@@ -138,6 +138,53 @@ function setMarkers(select) {
             selectData(i)
         }
         );
+    }
+}
+
+function setMarkersByDataCategory(getId, dataCategory) {
+    /** getId: 메뉴바에서 선택된 값이 무엇인지에 알려줌
+     * dataCategory: array - 주어진 범위를 설정해줌. 
+     *              만약 주어진 범위가 없으면 모두 표출. (dataCategory === [])
+     */
+
+    if (dataCategory === []) {   // 지정된 범위가 없다는 것은 초기값이다.
+        setMarkers(getId);
+    } else {
+        // 초기화
+        deleteIw(infoWindows)
+        deleteMarkers(marker)
+        marker = []
+
+        // marker의 실질적인 사이즈 지정
+        let markerSize = new kakao.maps.Size(10, 10);
+
+        let findIndexArray = [];
+        for (let index = 0; index < ColumnData[getId].length; index++) {
+            // 특정 조건을 만족하면 새로운 배열에 인덱스를 추가합니다.
+            if (ColumnData[getId][index] >= dataCategory[0] && ColumnData[getId][index] <= dataCategory[1]) {
+                findIndexArray.push(index);
+            }
+        }
+        for(i of findIndexArray){
+            let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
+
+            let markercolor =
+            {
+                "all": marker_blue,
+                "SPI_1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+                "SPI_2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+                "SPI_3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+            }
+
+            let markerImage = new kakao.maps.MarkerImage(markercolor[getId], markerSize)
+
+            marker[i] = new kakao.maps.Marker({
+                map: map,
+                position: position,
+                image: markerImage,
+                clickable: true
+            });
+        }
     }
 }
 function deleteMarkers(marker) {
@@ -175,7 +222,7 @@ $(function () {
             // 여기에 함수 추가.
             map.setCenter(position)
             createIw();
-            setMarkers('radio-all');
+            setMarkers('all');
             valueInitialize()
             makeTable();
 
@@ -188,11 +235,15 @@ $(function () {
     $("#slider-range").slider({
         range: true,
         min: 0,
-        max: 500,
-        values: [0, 500],
-        slide: function (event, ui) {
+        max: 10,
+        step: 2,
+        values: [0, 10],
+        slide: function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
             $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+            setMarkersByDataCategory('SPI_1',ui.values)
         }
+        // create: function() {} 슬라이더 생성시 이벤트 리스너
+        // change: function() {} 슬라이더 값을 변경했을 때
     });
     $("#amount").val($("#slider-range").slider("values", 0) +
         " - " + $("#slider-range").slider("values", 1));
@@ -349,17 +400,17 @@ function makeChartData(dataArr) {
             labels: ['L', 'M', 'H'],
             datasets: [{
                 data: dataArr,
-                datalabels : {
-                    color:'black', 
-                    font:{size:12},
-                    offset : 3,
+                datalabels: {
+                    color: 'black',
+                    font: { size: 12 },
+                    offset: 3,
                     anchor: 'end',
                     clamp: true,
                     clip: false,
-                    align : 'top'
-                 
-                    
-                    
+                    align: 'top'
+
+
+
                 },
                 backgroundColor: [
                     'rgba(255, 99, 132, 1)',
@@ -368,9 +419,9 @@ function makeChartData(dataArr) {
                 ],
             }]
         },
-        plugins:[ChartDataLabels],
+        plugins: [ChartDataLabels],
         options: {
-            plugins:{
+            plugins: {
                 legend: {
                     display: false
                 }
@@ -378,18 +429,18 @@ function makeChartData(dataArr) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks:{ // y축 줄당 표시 값
-                        stepSize:2
-                  }
+                    ticks: { // y축 줄당 표시 값
+                        stepSize: 2
+                    }
                 },
                 x: {
                     beginAtZero: true,
                     type: 'category',
-                  }
-            
+                }
+
             }
         }
-}
+    }
 }
 
 
