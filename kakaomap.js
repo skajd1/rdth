@@ -28,7 +28,7 @@ let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
 let chart = {}
- 
+
 
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
@@ -75,20 +75,18 @@ function get_color_SPI(num) {
         return marker_blue
     }
 }
-function createIw()
-{
- for (let i = 0; i < csv_data.length; i++)
- {
-    let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-    let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
-    let infowindow = new kakao.maps.InfoWindow({
-        content: iwContent,
-        removable: true,
-        position: position
-    });
-    infoWindows.push(infowindow);
- }
-    
+function createIw() {
+    for (let i = 0; i < csv_data.length; i++) {
+        let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
+        let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
+        let infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: true,
+            position: position
+        });
+        infoWindows.push(infowindow);
+    }
+
 }
 function deleteIw(iws) {
     if (iws.length !== 0) {
@@ -186,40 +184,37 @@ $(function () {
 
 $(function () {
     $("#slider-range").slider({
-      range: true,
-      min: 0,
-      max: 500,
+        range: true,
+        min: 0,
+        max: 500,
         values: [0, 500],
         slide: function (event, ui) {
             $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-      }
+        }
     });
     $("#amount").val($("#slider-range").slider("values", 0) +
         " - " + $("#slider-range").slider("values", 1));
-  });
+});
 
-var myChart ={};
+var myChart = {};
 
 function valueInitialize() {
     for (let key of Object.keys(csv_data[0])) {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
             continue;
         }
-        else if (key === 'dist')
-        {
-            setText(parseFloat(ColumnData.dist[csv_data.length-1]).toFixed(3) + " km","dist");
+        else if (key === 'dist') {
+            setText(parseFloat(ColumnData.dist[csv_data.length - 1]).toFixed(3) + " km", "dist");
         }
-        else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
-        {   
-            let sum = [0,0,0]
+        else if (key === 'AP_L' || key === 'AP_T' || key === 'AP_CJ' || key === 'AP_AC' || key === 'AP_P' || key === 'AP_H') {
+            let sum = [0, 0, 0]
 
-            for(let j = 0 ; j < 3 ; j ++)
-            {             
-                for(let i = 0 ; i < csv_data.length; i++){
+            for (let j = 0; j < 3; j++) {
+                for (let i = 0; i < csv_data.length; i++) {
                     sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
             }
-            myChart[key] = new Chart(key+'_Chart', makeChartData(sum));
+            myChart[key] = new Chart(key + '_Chart', makeChartData(sum));
         }
         else {
             setText(getAvg(ColumnData[key]).toFixed(3), key)
@@ -257,7 +252,7 @@ function makeTable() {
         "SPI_3", "AP_L", "AP_L", "AP_L", "AP_T", "AP_T", "AP_T", "AP_CJ", "AP_CJ", "AP_CJ", "AP_AC", "AP_AC", "AP_AC", "AP_P", "AP_P", "AP_P", "AP_H", "AP_H", "AP_H"];
 
     for (let i = 0; i < csv_data.length; i++) {
-		let tr = document.createElement("tr");
+        let tr = document.createElement("tr");
         tr.id = 'table-row-' + i
         count = 0
         for (let head of table_head) {
@@ -272,21 +267,20 @@ function makeTable() {
                 tr.appendChild(td)
             }
         }
-		table.appendChild(tr);
+        table.appendChild(tr);
         tr.addEventListener('click', function () {
-            selectData(i)       
+            selectData(i)
         })
     }
 
 }
 
 
-function setChart(index, key)
-{
+function setChart(index, key) {
     //chart[key].data = ColumnData[key][index][0,1,2]
 }
 
-function selectData(selectedRow){
+function selectData(selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
 
@@ -294,25 +288,23 @@ function selectData(selectedRow){
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
     let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
-    let keys = ['AP_L','AP_T','AP_CJ','AP_AC','AP_P','AP_H'];
+    let keys = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
     deleteIw(infoWindows)
     // 선택된 행을 다시 눌렀을 때
-    if (selected === index)
-    {
+    if (selected === index) {
         // chart 부분
-        for(let key of keys)
-        {
+        for (let key of keys) {
             removeData(myChart[key]);   // 기존 데이터 지움
-            let sum = [0,0,0]
-            label = ['L','M','H'];
-            for(let i = 0; i < 3 ; i++) // 데이터 다시 체워넣기
+            let sum = [0, 0, 0]
+            label = ['L', 'M', 'H'];
+            for (let i = 0; i < 3; i++) // 데이터 다시 체워넣기
             {
                 for (let j = 0; j < csv_data.length; j++) {
                     sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
                 console.log(sum);
-                addData(myChart[key],label[i],sum[i]);
-            }  
+                addData(myChart[key], label[i], sum[i]);
+            }
         }
 
 
@@ -331,14 +323,14 @@ function selectData(selectedRow){
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
     document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)" // 행 강조
-   
+
     // 선택시 chart 생성하는 for문
     for (let key of keys) {
         removeData(myChart[key]);
-        label = ['L','M','H'];
+        label = ['L', 'M', 'H'];
         for (let i = 0; i < 3; i++) {
-            addData(myChart[key],label[i],csv_data[index][key][i]);
-        }   
+            addData(myChart[key], label[i], csv_data[index][key][i]);
+        }
     }
 
     if (map.getLevel() > 2) {
