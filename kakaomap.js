@@ -27,13 +27,12 @@ let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
+let chart = {}
  
 
-
-// 지도생성 / 나중에 함수에 넣은 뒤 AJAX Call 에서 호출하게 하면 센터 및 크기레벨 동적제어 가능
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
-        center: new kakao.maps.LatLng(37.47776614, 126.8913644), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(37, 125), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 
@@ -44,7 +43,21 @@ map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 var zoomControl = new kakao.maps.ZoomControl();
 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
+function zoomIn() {
+    // 현재 지도의 레벨을 얻어옵니다
+    var level = map.getLevel();
 
+    // 지도를 1레벨 내립니다
+    map.setLevel(level - 1);
+}
+function zoomOut() {
+    // 현재 지도의 레벨을 얻어옵니다
+    var level = map.getLevel();
+
+    // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+    map.setLevel(level + 1);
+
+}
 function get_color_SPI(num) {
     if (num <= 2) {
         return marker_red;
@@ -62,10 +75,8 @@ function get_color_SPI(num) {
         return marker_blue
     }
 }
-function createIw()
-{
- for (let i = 0; i < csv_data.length; i++)
- {
+function createIw() {
+    for (let i = 0; i < csv_data.length; i++) {
     let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
     let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
     let infowindow = new kakao.maps.InfoWindow({
@@ -135,7 +146,7 @@ function deleteMarkers(marker) {
     }
 
 }
-// csv 읽는 Ajax call
+// ajax call
 $(function () {
     let fileName = "pont.csv";
     $.ajax({
@@ -152,16 +163,15 @@ $(function () {
                     AP_P: [column[24], column[25], column[26]], AP_H: [column[27], column[28], column[29]], note: column[30], w: column[31]
                 })
             }
-            for (let key of Object.keys(csv_data[0]) )
-            {   
+            for (let key of Object.keys(csv_data[0])) {
                 ColumnData[key] = [];
-                for(let i = 0 ; i < csv_data.length ; i ++)
-                {
+                for (let i = 0; i < csv_data.length; i++) {
                     ColumnData[key].push(csv_data[i][key])
                 }
             }
-            
+            let position = new kakao.maps.LatLng(parseFloat(csv_data[0].latlng[0]), parseFloat(csv_data[0].latlng[1]))
             // 여기에 함수 추가.
+            map.setCenter(position)
             createIw();
             setMarkers('radio-all');
             valueInitialize()
@@ -172,18 +182,18 @@ $(function () {
     });
 });
 
-$( function() {
-    $( "#slider-range" ).slider({
+$(function () {
+    $("#slider-range").slider({
       range: true,
       min: 0,
       max: 500,
-      values: [0,500],
-      slide: function( event, ui ) {
-        $( "#amount" ).val(ui.values[0] + " - " + ui.values[1]);
+        values: [0, 500],
+        slide: function (event, ui) {
+            $("#amount").val(ui.values[0] + " - " + ui.values[1]);
       }
     });
-    $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
-      " - " + $( "#slider-range" ).slider( "values", 1 ) );    
+    $("#amount").val($("#slider-range").slider("values", 0) +
+        " - " + $("#slider-range").slider("values", 1));
   });
 
 
@@ -197,54 +207,50 @@ function valueInitialize()
         }
         else if (key === 'dist')
         {
-            setText(getSum(ColumnData.dist).toFixed(3),"dist");
+            setText(parseFloat(ColumnData.dist[csv_data.length-1]).toFixed(3) + " km","dist");
         }
         else if (key ==='AP_L' || key === 'AP_T'|| key === 'AP_CJ'|| key === 'AP_AC'|| key === 'AP_P'|| key === 'AP_H')
         {
-            let dataSumObj = []
+            let sum = [0,0,0]
+            
             for(let j = 0 ; j < 3 ; j ++)
             {   
                 let id = key+"_"+(j+1)
-                let sum = 0;
+                
                 for(let i = 0 ; i < csv_data.length; i++)
                 {
-                    sum += parseFloat(ColumnData[key][i][j]);
+                    sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
-                dataSumObj.push(sum);
+                //setText(sum[j].toFixed(3),id)
+                
             }
-            // Chart 만들기
-            makeChart(key, dataSumObj);
+
+            //chart[key] = new Chart(data = sum[0],sum[1],sum[2]~~)
         }
-        else
-        {
-            setText(getAvg(ColumnData[key]).toFixed(3),key)
+        else {
+            setText(getAvg(ColumnData[key]).toFixed(3), key)
         }
 
     }
 
 }
 
-function getSum(data_array)
-{   
+function getSum(data_array) {
     let sum = 0;
-    for(let i = 0 ; i < csv_data.length ; i ++)
-    {
+    for (let i = 0; i < csv_data.length; i++) {
         sum += parseFloat(data_array[i])
     }
     return sum;
 }
-function getAvg(data_array)
-{
+function getAvg(data_array) {
     /*data_array(type:array) 받아들여 return 값으로 평균을 내주는 함수*/
     let sum = 0;
-    for(let i = 0; i < csv_data.length; i ++)
-    {
+    for (let i = 0; i < csv_data.length; i++) {
         sum += parseFloat(data_array[i])
     }
-    return (sum / csv_data.length) ;
+    return (sum / csv_data.length);
 }
-function setText(value, ID)
-{
+function setText(value, ID) {
     /* value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
     */
     document.getElementById(ID).innerText = value
@@ -253,34 +259,37 @@ function setText(value, ID)
 function makeTable() {
 
     let table = document.getElementById('cb3-table-body');
-    let table_head = ["dist","note","w","pd","roughness","amount_crack","ratio_crack","SPI_1","SPI_2",
-"SPI_3","AP_L","AP_L","AP_L","AP_T","AP_T","AP_T","AP_CJ","AP_CJ","AP_CJ","AP_AC","AP_AC","AP_AC","AP_P","AP_P","AP_P","AP_H","AP_H","AP_H"];
+    let table_head = ["dist", "note", "w", "pd", "roughness", "amount_crack", "ratio_crack", "SPI_1", "SPI_2",
+        "SPI_3", "AP_L", "AP_L", "AP_L", "AP_T", "AP_T", "AP_T", "AP_CJ", "AP_CJ", "AP_CJ", "AP_AC", "AP_AC", "AP_AC", "AP_P", "AP_P", "AP_P", "AP_H", "AP_H", "AP_H"];
 
-    for(let i=0; i<csv_data.length; i++){
+    for (let i = 0; i < csv_data.length; i++) {
 		let tr = document.createElement("tr");
         tr.id = 'table-row-' + i
-
         count = 0
-        for (let head of table_head)
-        {
+        for (let head of table_head) {
             let td = document.createElement("td")
-            if (head.startsWith('AP_'))
-            {
-                td.appendChild(document.createTextNode(ColumnData[head][i][count%3]+ ""));
+            if (head.startsWith('AP_')) {
+                td.appendChild(document.createTextNode(ColumnData[head][i][count % 3] + ""));
                 tr.appendChild(td)
                 count++
             }
-            else{
-                td.appendChild(document.createTextNode(ColumnData[head][i]+ ""));
+            else {
+                td.appendChild(document.createTextNode(ColumnData[head][i] + ""));
                 tr.appendChild(td)
             }
         }
 		table.appendChild(tr);
-        tr.addEventListener('click', function(){
+        tr.addEventListener('click', function () {
             selectData(i)       
         })
 	}
 
+}
+
+
+function setChart(index, key)
+{
+    //chart[key].data = ColumnData[key][index][0,1,2]
 }
 
 function selectData(selectedRow){
@@ -292,60 +301,48 @@ function selectData(selectedRow){
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
     let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
+    let keys = ['AP_L','AP_T','AP_CJ','AP_AC','AP_P','AP_H'];
     deleteIw(infoWindows)
+    // 선택된 행을 다시 눌렀을 때
     if (selected === index)
     {
+        for(let key of keys)
+        {
+            for(let i = 0; i < 3 ; i++)
+            {
+                let id = key+"_"+(i+1)
+                let sum = 0;
+                for (let j = 0; j < csv_data.length; j++) {
+                    sum += parseFloat(ColumnData[key][j][i]);
+                }
+                //setText(sum.toFixed(3), id)
+            }
+        }
         document.getElementById("table-row-" + index).style = "background-color : white"
+        if (map.getLevel() <= 2) {
+            zoomOut()
+        }
         selected = -1
         return
     }
     infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
     document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
     document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-    for (let i = 0; i < csv_data.length; i++)
+    for (let i = 0; i < csv_data.length; i++) // 다른 행 강조 해제
     {
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
-    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)"
+    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)" // 행 강조
+    for (let key of keys) {
+        for (let i = 0; i < 3; i++) {
+            //setText(csv_data[index][key][i], (key + '_' + (i + 1)));
+        }
+        //setChart(index,key);
+    }
+    if (map.getLevel() > 2) {
+        zoomIn()
+    }
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
 
-}
-
-function makeChart(getId, dataSet){
-    /** getId(id)와 dataSet(array)를 받아 Chart를 생성하는 함수. */
-    var ctx = document.getElementById(getId+'_Chart');
-
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['L','M','H'],
-            datasets: [{
-                label: '# of Votes',
-                data: dataSet,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
 }
