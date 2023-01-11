@@ -54,7 +54,7 @@ function zoomOut() {
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
-    // 지도를 1레벨 올립니다 (지도가 확대됩니다)
+    // 지도를 1레벨 내립니다 (지도가 확대됩니다)
     map.setLevel(level + 1);
 
 }
@@ -75,18 +75,20 @@ function get_color_SPI(num) {
         return marker_blue
     }
 }
-function createIw() {
-    for (let i = 0; i < csv_data.length; i++) {
-        let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-        let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
-        let infowindow = new kakao.maps.InfoWindow({
-            content: iwContent,
-            removable: true,
-            position: position
-        });
-        infoWindows.push(infowindow);
-    }
-
+function createIw()
+{
+ for (let i = 0; i < csv_data.length; i++)
+ {
+    let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
+    let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
+    let infowindow = new kakao.maps.InfoWindow({
+        content: iwContent,
+        removable: true,
+        position: position
+    });
+    infoWindows.push(infowindow);
+ }
+    
 }
 function deleteIw(iws) {
     if (iws.length !== 0) {
@@ -184,17 +186,17 @@ $(function () {
 
 $(function () {
     $("#slider-range").slider({
-        range: true,
-        min: 0,
-        max: 500,
+      range: true,
+      min: 0,
+      max: 500,
         values: [0, 500],
         slide: function (event, ui) {
             $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-        }
+      }
     });
     $("#amount").val($("#slider-range").slider("values", 0) +
         " - " + $("#slider-range").slider("values", 1));
-});
+  });
 
 var myChart ={};
 
@@ -255,7 +257,7 @@ function makeTable() {
         "SPI_3", "AP_L", "AP_L", "AP_L", "AP_T", "AP_T", "AP_T", "AP_CJ", "AP_CJ", "AP_CJ", "AP_AC", "AP_AC", "AP_AC", "AP_P", "AP_P", "AP_P", "AP_H", "AP_H", "AP_H"];
 
     for (let i = 0; i < csv_data.length; i++) {
-        let tr = document.createElement("tr");
+		let tr = document.createElement("tr");
         tr.id = 'table-row-' + i
         count = 0
         for (let head of table_head) {
@@ -270,9 +272,9 @@ function makeTable() {
                 tr.appendChild(td)
             }
         }
-        table.appendChild(tr);
+		table.appendChild(tr);
         tr.addEventListener('click', function () {
-            selectData(i)
+            selectData(i)       
         })
     }
 
@@ -283,7 +285,6 @@ function setChart(index, key)
 {
     //chart[key].data = ColumnData[key][index][0,1,2]
 }
-
 
 function selectData(selectedRow){
     //기존 선택되었던 컬럼 선택 해제,
@@ -319,7 +320,6 @@ function selectData(selectedRow){
         if (map.getLevel() <= 2) {
             zoomOut()
         }
-
         selected = -1
         return
     }
