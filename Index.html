@@ -23,7 +23,8 @@
             <span class="navbar-brand mb-0 h1">로드텍</span>
         </div>
     </nav>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 </head>
 
 <body>
@@ -78,7 +79,23 @@
                     <div style="width : 120px; margin : 0 auto;" id="slider-range"></div>
                 </div>
                 <div class='category-color-box'>
-                    category
+                    <div style = "margin-top : 30px">
+                        <div>
+                            0 - 2 <img style = "margin-left : 5px;width :  12px; height : 12px;" src = "redcircle.png">
+                        </div>
+                        <div>
+                            2 - 4<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "orangecircle.png">
+                        </div>
+                        <div>
+                            4 - 6<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "yellowcircle.png">
+                        </div>
+                        <div>
+                            6 - 8<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "greencircle.png">
+                        </div>
+                        <div>
+                            8 - 10<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "bluecircle.png">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -155,21 +172,27 @@
 
             <div class="cb2">
                 <div class="cb2-AP-L">
+                    AP 횡방향 균열
                     <canvas id="AP_L_Chart" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-T">
+                    AP 종방향 균열
                     <canvas id="AP_T_Chart" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-CJ">
+                    AP 시공줄눈 균열
                     <canvas id="AP_CJ_Chart" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-AC">
+                    AP 거북등껍질 균열
                     <canvas id="AP_AC_Chart" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-P">
+                    AP 패칭 균열
                     <canvas id="AP_P_Chart" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-H">
+                    AP 포트홀 균열
                     <canvas id="AP_H_Chart" width="400" height="400"></canvas>
                 </div>
             </div>
@@ -265,9 +288,6 @@
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=649875af421ea126bd6af75263cc7e9b"></script>
     <script type="text/javascript" src="./kakaomap.js"> </script>
-    <script type="text/javascript">
-
-    </script>
 
 </body>
 

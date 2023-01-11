@@ -27,6 +27,8 @@ let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
+
+let myChart = {};
 let chart = {}
 
 
@@ -196,8 +198,6 @@ $(function () {
         " - " + $("#slider-range").slider("values", 1));
 });
 
-var myChart = {};
-
 function valueInitialize() {
     for (let key of Object.keys(csv_data[0])) {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
@@ -276,10 +276,6 @@ function makeTable() {
 }
 
 
-function setChart(index, key) {
-    //chart[key].data = ColumnData[key][index][0,1,2]
-}
-
 function selectData(selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
@@ -346,36 +342,54 @@ function makeChartData(dataArr) {
      * 파라미터: dataArr(array)를 받아들임
      * return : object
      */
+    // key로 label 값 정해주기
     return {
         type: 'bar',
         data: {
             labels: ['L', 'M', 'H'],
             datasets: [{
-                label: '# of Votes',
                 data: dataArr,
+                datalabels : {
+                    color:'black', 
+                    font:{size:12},
+                    offset : 3,
+                    anchor: 'end',
+                    clamp: true,
+                    clip: false,
+                    align : 'top'
+                 
+                    
+                    
+                },
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                ],
-                borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                 ],
-                borderWidth: 1
             }]
         },
+        plugins:[ChartDataLabels],
         options: {
+            plugins:{
+                legend: {
+                    display: false
+                }
+            },
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+                y: {
+                    beginAtZero: true,
+                    ticks:{ // y축 줄당 표시 값
+                        stepSize:2
+                  }
+                },
+                x: {
+                    beginAtZero: true,
+                    type: 'category',
+                  }
+            
             }
         }
-    }
+}
 }
 
 

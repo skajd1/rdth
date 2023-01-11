@@ -29,7 +29,7 @@ body span {
 }
 .rangebox{
     text-align : center;
-    height : 230px
+    height : 300px
 }
 .category-color-box{
     
@@ -173,10 +173,10 @@ body span {
 }
 .cb2 > *{
     border : 1px groove;
-    width : 18%;
+    width : 15.9%;
     margin-right : 10px;
     text-align : center;
-    padding-top : 70px;
+    
 }
 .cb3{
     margin-right : 10px;
