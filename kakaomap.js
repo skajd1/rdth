@@ -17,18 +17,19 @@ AP_H : 포트홀
 note : 비고
 w : 분석 관심 폭
 */
-let csv_data = [];
-let marker = [];
-let infoWindows = [];
-let ColumnData = {};
+let csv_data = [];      // object[arr]
+let marker = [];        // object[arr] 생성된 maker들 모임
+let infoWindows = [];   // object[arr]
+let ColumnData = {};    // obejct[object]
 let marker_green = "./greencircle.png";
 let marker_orange = "./orangecircle.png";
 let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
-let myChart = {};   // {'ChartName' : 'new Chart()'}
+let myChart = {};       // obejct[object]  {{'ChartName' : 'new Chart()'}, ... }
 let chart = {}
+let currently_selected_type = "radio-All";   // string 현제 선택된 도로상태유형을 저장. "radio-[딕셔너리의 key값들]"
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
         center: new kakao.maps.LatLng(37, 125), // 지도의 중심좌표
@@ -43,6 +44,7 @@ map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
 
 function zoomIn() {
+    /** 지도의 레벨을 내리는 함수. (지도를 축소) */
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
@@ -50,29 +52,20 @@ function zoomIn() {
     map.setLevel(level - 1);
 }
 function zoomOut() {
+    /** 지도의 레벨을 올리는 함수. (지도를 확대) */
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
-    // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+    // 지도를 1레벨 올립니다 (지도가 확대됩니다)
     map.setLevel(level + 1);
 
 }
 function get_color_SPI(num) {
-    if (num <= 2) {
-        return marker_red;
-    }
-    else if (num <= 4) {
-        return marker_orange;
-    }
-    else if (num <= 6) {
-        return marker_yellow;
-    }
-    else if (num <= 8) {
-        return marker_green;
-    }
-    else {
-        return marker_blue
-    }
+    if (num <= 2) { return marker_red; }
+    else if (num <= 4) { return marker_orange; }
+    else if (num <= 6) { return marker_yellow; }
+    else if (num <= 8) { return marker_green; }
+    else { return marker_blue }
 }
 function createIw() {
     for (let i = 0; i < csv_data.length; i++) {
@@ -85,7 +78,6 @@ function createIw() {
         });
         infoWindows.push(infowindow);
     }
-
 }
 function deleteIw(iws) {
     if (iws.length !== 0) {
@@ -94,84 +86,104 @@ function deleteIw(iws) {
         }
     }
 }
-function setMarkers(select) {
+function setSlider(getId) {
+    currently_selected_type = getId;
+    if (getId == "radio-All") {
+        document.getElementById("select_range").style.visibility = 'hidden';
+        setMarkers(getId);
+    }
+    else if (getId == "radio-SPI_1" || getId == "radio-SPI_2" || getId == "radio-SPI_3") {
+        document.getElementById("select_range").style.visibility = 'visible';
+        setMarkers(getId);
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: 10,
+                step: 2,
+                values: [0, 10],
+                change : function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
+                    $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+                    setMarkerOpacityByScale($("#slider-range").slider("values"));
+                }
+            });
+            $("#amount").val($("#slider-range").slider("values", 0) +
+                " - " + $("#slider-range").slider("values", 1));
 
+        });
+    }
+    else {
+        document.getElementById("select_range").style.visibility = 'visible';
+        setMarkers(getId);
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: 10,
+                step: 1,
+                values: [0, 10],
+                change : function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
+                    $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+                    setMarkerOpacityByScale($("#slider-range").slider("values"));
+                }
+            });
+            $("#amount").val($("#slider-range").slider("values", 0) +
+                " - " + $("#slider-range").slider("values", 1));
+
+        });
+    }
+}
+function setMarkerOpacityByScale(scales) {
+    /** slider에서 지정된 범위 scales[array]의 조건에 맞는 marker의 선명도(opacity)를 설정 */
+    let indexArr = [];
+    let cnt = 0;
+    if (currently_selected_type !== 'radio-All') {
+        for (let i of ColumnData[currently_selected_type.split('-')[1]]) {
+            marker[cnt].setOpacity(0.1);
+            if (scales[0] <= i && scales[1] >= i) { indexArr.push(cnt) }
+            ++cnt;
+        }
+        for (let i of indexArr) {
+            marker[i].setOpacity(1);
+        }
+    }
+}
+function setMarkers(select) {
+    /** Radio에서 선택되면 marker를 보여주는 함수 */
     deleteIw(infoWindows)
     deleteMarkers(marker)
     marker = []
-
-
     let markerSize = new kakao.maps.Size(10, 10);
 
-    for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
-        let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
+    if (select == "radio-All") {
+        for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
+            let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
-        let markercolor =
-        {
-            "radio-all": marker_blue,
-            "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-            "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-            "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
-        }
-
-        let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
-        marker[i] = new kakao.maps.Marker({
-            map: map,
-            position: position,
-            image: markerImage,
-            clickable: true
-        });
-
-        let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[i].status_img
-        let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
-
-        // 클릭 리스너, 다른 차트와 연동할 때 사용
-        kakao.maps.event.addListener(marker[i], 'click', function () {
-            // deleteIw(infoWindows)
-            // infoWindows[i].open(map, marker[i]); // 클릭할 때 인포 윈도우 생성
-            // document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
-            // document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-            // map.setCenter(position) // 선택한 마커 중심으로 맵 이동
-            selectData(i)
-        }
-        );
-    }
-}
-function setMarkersByDataCategory(getId, dataCategory) {
-    /** getId: 메뉴바에서 선택된 값이 무엇인지에 알려줌
-     * dataCategory: array - 주어진 범위를 설정해줌. 
-     *              만약 주어진 범위가 없으면 모두 표출. (dataCategory === [])
-     */
-
-    if (dataCategory === []) {   // 지정된 범위가 없다는 것은 초기값이다.
-        setMarkers(getId);
-    } else {
-        // 초기화
-        deleteIw(infoWindows)
-        deleteMarkers(marker)
-        marker = []
-
-        // marker의 실질적인 사이즈 지정
-        let markerSize = new kakao.maps.Size(10, 10);
-
-        let findIndexArray = [];
-        for (let index = 0; index < ColumnData[getId].length; index++) {
-            // 특정 조건을 만족하면 새로운 배열에 인덱스를 추가합니다.
-            if (ColumnData[getId][index] >= dataCategory[0] && ColumnData[getId][index] <= dataCategory[1]) {
-                findIndexArray.push(index);
+            let markerImage = new kakao.maps.MarkerImage(marker_blue, markerSize)
+            marker[i] = new kakao.maps.Marker({
+                map: map,
+                position: position,
+                image: markerImage,
+                clickable: true
+            });
+            // 클릭 리스너, 다른 차트와 연동할 때 사용
+            kakao.maps.event.addListener(marker[i], 'click', function () {
+                selectData(i)
             }
+            );
         }
-        for (i of findIndexArray) {
+    }
+    else if (select == "radio-SPI_1" || select == "radio-SPI_2" || select == "radio-SPI_3") {
+
+        for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
             let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
             let markercolor =
             {
-                "radio-all": marker_blue,
-                "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-                "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-                "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+                "radio-SPI_1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+                "radio-SPI_2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+                "radio-SPI_3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
             }
-
             let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
             marker[i] = new kakao.maps.Marker({
                 map: map,
@@ -179,18 +191,48 @@ function setMarkersByDataCategory(getId, dataCategory) {
                 image: markerImage,
                 clickable: true
             });
+            // 클릭 리스너, 다른 차트와 연동할 때 사용
+            kakao.maps.event.addListener(marker[i], 'click', function () {
+                selectData(i)
+            }
+            );
         }
     }
+    else {
+        for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
+            let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
+
+            let markercolor =
+            {
+                "radio-pd": get_color_SPI(parseFloat(csv_data[i].pd)),
+                "radio-roughness": get_color_SPI(parseFloat(csv_data[i].roughness)),
+                "radio-amount_crack": get_color_SPI(parseFloat(csv_data[i].amount_crack)),
+                "radio-ratio_crack": get_color_SPI(parseFloat(csv_data[i].ratio_crack)),
+            }
+            let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
+            marker[i] = new kakao.maps.Marker({
+                map: map,
+                position: position,
+                image: markerImage,
+                clickable: true
+            });
+            // 클릭 리스너, 다른 차트와 연동할 때 사용
+            kakao.maps.event.addListener(marker[i], 'click', function () {
+                selectData(i)
+            }
+            );
+        }
+    }
+
 }
 function deleteMarkers(marker) {
+    // marker와 범위인 인덱스 arr를 받아온다.
     if (marker.length !== 0) {
         for (let i = 0; i < csv_data.length; i++) {
             marker[i].setMap(null);
         }
     }
-
 }
-// ajax call
 $(function () {
     let fileName = "pont.csv";
     $.ajax({
@@ -217,38 +259,12 @@ $(function () {
             // 여기에 함수 추가.
             map.setCenter(position)
             createIw();
-            setMarkers('radio-all');
+            setMarkers('radio-All');
             valueInitialize()
             makeTable();
         }
     });
 });
-$(function () {
-    $("#slider-range").slider({
-        range: true,
-        min: 0,
-        max: 10,
-        step: 2,
-        values: [0, 10],
-        slide: function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
-            $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-        }
-        // create: function() {} 슬라이더 생성시 이벤트 리스너
-        // change: function() {} 슬라이더 값을 변경했을 때
-    });
-    $("#amount").val($("#slider-range").slider("values", 0) +
-        " - " + $("#slider-range").slider("values", 1));
-});
-
-function checkRadioValue() {
-    document.getElementById("radio-all").addEventListener('click', function () {
-        // 1. radio 중 선택이 되어있는지 확인하고 바꿈 2. radio의 선택된 값을 가져옴.
-        // radio의 선택된 값을 가져옴.
-        let checked_value = $(":input:radio[name=select_form]:checked").val();
-        if (checked_value == "spi1") { console.log("hello"); }
-    })
-}
-
 function valueInitialize() {
     for (let key of Object.keys(csv_data[0])) {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
@@ -345,7 +361,6 @@ function selectData(selectedRow) {
                 for (let j = 0; j < csv_data.length; j++) {
                     sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
-                console.log(sum);
                 addData(myChart[key], label[i], sum[i]);
             }
         }
