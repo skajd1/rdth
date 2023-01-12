@@ -27,11 +27,8 @@ let marker_red = "./redcircle.png";
 let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
-
-let myChart = {};
+let myChart = {};   // {'ChartName' : 'new Chart()'}
 let chart = {}
-
-
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
         center: new kakao.maps.LatLng(37, 125), // 지도의 중심좌표
@@ -39,11 +36,11 @@ let mapContainer = document.getElementById('map'), // 지도를 표시할 div
     };
 
 let map = new kakao.maps.Map(mapContainer, mapOption);
-
 var mapTypeControl = new kakao.maps.MapTypeControl();
 map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 var zoomControl = new kakao.maps.ZoomControl();
 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
 
 function zoomIn() {
     // 현재 지도의 레벨을 얻어옵니다
@@ -140,7 +137,6 @@ function setMarkers(select) {
         );
     }
 }
-
 function setMarkersByDataCategory(getId, dataCategory) {
     /** getId: 메뉴바에서 선택된 값이 무엇인지에 알려줌
      * dataCategory: array - 주어진 범위를 설정해줌. 
@@ -227,7 +223,6 @@ $(function () {
         }
     });
 });
-
 $(function () {
     $("#slider-range").slider({
         range: true,
