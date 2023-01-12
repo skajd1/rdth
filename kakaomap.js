@@ -108,11 +108,11 @@ function deleteIw(iws) {
 function setSlider(getId) {
 
     currently_radio_type = getId;
-    if (currently_radio_type == "radio-All") {
+    if (currently_radio_type === "radio-All") {
         document.getElementById("select_range").style.visibility = 'hidden';
         setMarkers(currently_radio_type);
     }
-    else if (currently_radio_type == "radio-SPI_1" || currently_radio_type == "radio-SPI_2" || currently_radio_type == "radio-SPI_3") {
+    else if (["radio-SPI_1", "radio-SPI_2", "radio-SPI_3"].includes(currently_radio_type)) {
         document.getElementById("select_range").style.visibility = 'visible';
         setMarkers(currently_radio_type);
         $("#slider-range").slider({
@@ -193,7 +193,7 @@ function setMarkers(select) {
             );
         }
     }
-    else if (select == "radio-SPI_1" || select == "radio-SPI_2" || select == "radio-SPI_3") {
+    else if (["radio-SPI_1", "radio-SPI_2", "radio-SPI_3"].includes(currently_radio_type)) {
 
         for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
             let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
@@ -388,7 +388,7 @@ function makeGrid() {
 function selectData(selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
-    
+
     let index = selectedRow;
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
