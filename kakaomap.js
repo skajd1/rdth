@@ -386,7 +386,7 @@ function makeGrid() {
 function selectData(selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
-
+    
     let index = selectedRow;
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
     let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
@@ -448,12 +448,10 @@ function selectData(selectedRow) {
 
 /** Chart 생성자에 들아갈 data를 만들어 주는 함수
  * input L,M,H_data[arr]
+ * return chart_data[object]
  */
 function makeChartData(dataArr) {
-    /** 차트 생성 함수의 파라미터를 만드는 함수. 
-     * 파라미터: dataArr(array)를 받아들임
-     * return : object
-     */
+
     // key로 label 값 정해주기
     return {
         type: 'bar',
@@ -504,7 +502,7 @@ function makeChartData(dataArr) {
  * input myChart[?][object]
  */
 function removeChartData(chart) {
-    /** 기존에 저장된 차트의 라벨과 데이터를 지우는 함수 */
+
     chart.data.labels.pop();
     chart.data.datasets.forEach((dataset) => {
         dataset.data.pop();
@@ -516,7 +514,7 @@ function removeChartData(chart) {
  * input myChart[?][object], label[string], data[number]
 */
 function addChartData(chart, label, data) {
-    /** 기존에 저장된 차트에 데이터를 추가하는 함수 */
+
     chart.data.labels.push(label);
     chart.data.datasets.forEach((dataset) => {
         dataset.data.push(data);
