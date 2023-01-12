@@ -40,6 +40,7 @@ var mapTypeControl = new kakao.maps.MapTypeControl();
 map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 var zoomControl = new kakao.maps.ZoomControl();
 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+let csv_data_length;    //csv_data.lenght 값을 저장.
 
 /** 지도의 레벨을 내리는 함수. (지도를 축소) */
 function zoomIn() {
@@ -77,7 +78,7 @@ function get_color_SPI(num) {
 /** infoWindow를 생성하는 함수. */
 function createIw() {
 
-    for (let i = 0; i < csv_data.length; i++) {
+    for (let i = 0; i < csv_data_length; i++) {
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
         let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
         let infowindow = new kakao.maps.InfoWindow({
@@ -175,7 +176,7 @@ function setMarkers(select) {
     let markerSize = new kakao.maps.Size(10, 10);
 
     if (select == "radio-All") {
-        for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
+        for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
             let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
             let markerImage = new kakao.maps.MarkerImage(marker_blue, markerSize)
@@ -194,7 +195,7 @@ function setMarkers(select) {
     }
     else if (select == "radio-SPI_1" || select == "radio-SPI_2" || select == "radio-SPI_3") {
 
-        for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
+        for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
             let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
             let markercolor =
@@ -218,7 +219,7 @@ function setMarkers(select) {
         }
     }
     else {
-        for (let i = 0; i < csv_data.length; i++) { // 마커 하나씩 지정해서 대입
+        for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
             let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
             let markercolor =
@@ -251,7 +252,7 @@ function setMarkers(select) {
 function deleteMarkers(marker) {
 
     if (marker.length !== 0) {
-        for (let i = 0; i < csv_data.length; i++) {
+        for (let i = 0; i < csv_data_length; i++) {
             marker[i].setMap(null);
         }
     }
@@ -274,9 +275,10 @@ $(function () {
                     AP_P: [column[24], column[25], column[26]], AP_H: [column[27], column[28], column[29]], note: column[30], w: column[31]
                 })
             }
+            csv_data_length = csv_data.length;
             for (let key of Object.keys(csv_data[0])) {
                 ColumnData[key] = [];
-                for (let i = 0; i < csv_data.length; i++) {
+                for (let i = 0; i < csv_data_length; i++) {
                     ColumnData[key].push(csv_data[i][key])
                 }
             }
@@ -299,13 +301,13 @@ function valueInitialize() {
             continue;
         }
         else if (key === 'dist') {
-            setText(parseFloat(ColumnData.dist[csv_data.length - 1]).toFixed(3) + " km", "dist");
+            setText(parseFloat(ColumnData.dist[csv_data_length - 1]).toFixed(3) + " km", "dist");
         }
         else if (key === 'AP_L' || key === 'AP_T' || key === 'AP_CJ' || key === 'AP_AC' || key === 'AP_P' || key === 'AP_H') {
             let sum = [0, 0, 0]
 
             for (let j = 0; j < 3; j++) {
-                for (let i = 0; i < csv_data.length; i++) {
+                for (let i = 0; i < csv_data_length; i++) {
                     sum[j] += parseFloat(ColumnData[key][i][j]);
                 }
             }
@@ -324,7 +326,7 @@ function valueInitialize() {
 function getSum(data_array) {
 
     let sum = 0;
-    for (let i = 0; i < csv_data.length; i++) {
+    for (let i = 0; i < csv_data_length; i++) {
         sum += parseFloat(data_array[i])
     }
     return sum;
@@ -337,10 +339,10 @@ function getSum(data_array) {
 function getAvg(data_array) {
 
     let sum = 0;
-    for (let i = 0; i < csv_data.length; i++) {
+    for (let i = 0; i < csv_data_length; i++) {
         sum += parseFloat(data_array[i])
     }
-    return (sum / csv_data.length);
+    return (sum / csv_data_length);
 }
 
 /** value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
@@ -357,7 +359,7 @@ function makeGrid() {
     let table_head = ["dist", "note", "w", "pd", "roughness", "amount_crack", "ratio_crack", "SPI_1", "SPI_2",
         "SPI_3", "AP_L", "AP_L", "AP_L", "AP_T", "AP_T", "AP_T", "AP_CJ", "AP_CJ", "AP_CJ", "AP_AC", "AP_AC", "AP_AC", "AP_P", "AP_P", "AP_P", "AP_H", "AP_H", "AP_H"];
 
-    for (let i = 0; i < csv_data.length; i++) {
+    for (let i = 0; i < csv_data_length; i++) {
         let tr = document.createElement("tr");
         tr.id = 'table-row-' + i
         count = 0
@@ -404,7 +406,7 @@ function selectData(selectedRow) {
             label = ['L', 'M', 'H'];
             for (let i = 0; i < 3; i++) // 데이터 다시 체워넣기
             {
-                for (let j = 0; j < csv_data.length; j++) {
+                for (let j = 0; j < csv_data_length; j++) {
                     sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
                 addChartData(myChart[key], label[i], sum[i]);
@@ -422,7 +424,7 @@ function selectData(selectedRow) {
     infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
     document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
     document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-    for (let i = 0; i < csv_data.length; i++) // 다른 행 강조 해제
+    for (let i = 0; i < csv_data_length; i++) // 다른 행 강조 해제
     {
         document.getElementById("table-row-" + i).style = "background-color : white"
     }
