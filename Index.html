@@ -40,32 +40,32 @@
             <form method="get">
                 <fieldset class='radiobox'>
                     <legend>도로상태유형</legend>
-                    <input class="form-check-input" type="radio" id="radio-all" name="select_form" value="All" checked
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-all" value="All" checked
                         onclick='setMarkers(event.target.id)'>
                     <label for="radio-all"> 전체 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-pd" name="select_form" value="p" onclick=''>
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-pd" value="p" onclick=''>
                     <label for="radio-pd"> 소성변형 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-rough" name="select_form" value="lr"
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-rough" value="lr"
                         onclick=''>
                     <label for="radio-rough"> 종단평탄성 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-ac" name="select_form" value="a" onclick=''>
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-ac" value="a" onclick=''>
                     <label for="radio-ac"> 균열량 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-rc" name="select_form" value="r" onclick=''>
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-rc" value="r" onclick=''>
                     <label for="radio-rc"> 균열율 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-SPI1" name="select_form" value="spi1"
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-SPI1" value="spi1"
                         onclick='setMarkers(event.target.id)'>
                     <label for="radio-SPI1"> 도시고속도로 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-SPI2" name="select_form" value="spi2"
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-SPI2" value="spi2"
                         onclick='setMarkers(event.target.id)'>
                     <label for="radio-SPI2"> 주간선도로 </label><br>
 
-                    <input class="form-check-input" type="radio" id="radio-SPI3" name="select_form" value="spi3"
+                    <input class="form-check-input" type="radio" name="select_form" id="radio-SPI3" value="spi3"
                         onclick='setMarkers(event.target.id)'>
                     <label for="radio-SPI3"> 보조간선도로 </label><br>
 
@@ -73,27 +73,27 @@
             </form>
 
             <div class='rangebox' id="select_range">
-                <label for="amount" >데이터 범위 설정:</label>
+                <label for="amount">데이터 범위 설정:</label>
                 <input type="text" id="amount" readonly style="border:0;width : 150px; text-align:center">
                 <div style="text-align : center; width : 150px; margin : 0 auto">
                     <div style="width : 120px; margin : 0 auto;" id="slider-range"></div>
                 </div>
                 <div class='category-color-box'>
-                    <div style = "margin-top : 30px">
+                    <div style="margin-top : 30px">
                         <div>
-                            0 - 2 <img style = "margin-left : 5px;width :  12px; height : 12px;" src = "redcircle.png">
+                            0 - 2 <img style="margin-left : 5px;width :  12px; height : 12px;" src="redcircle.png">
                         </div>
                         <div>
-                            2 - 4<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "orangecircle.png">
+                            2 - 4<img style="margin-left : 5px;width :  12px; height : 12px;" src="orangecircle.png">
                         </div>
                         <div>
-                            4 - 6<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "yellowcircle.png">
+                            4 - 6<img style="margin-left : 5px;width :  12px; height : 12px;" src="yellowcircle.png">
                         </div>
                         <div>
-                            6 - 8<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "greencircle.png">
+                            6 - 8<img style="margin-left : 5px;width :  12px; height : 12px;" src="greencircle.png">
                         </div>
                         <div>
-                            8 - 10<img style = "margin-left : 5px;width :  12px; height : 12px;" src = "bluecircle.png">
+                            8 - 10<img style="margin-left : 5px;width :  12px; height : 12px;" src="bluecircle.png">
                         </div>
                     </div>
                 </div>

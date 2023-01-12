@@ -161,7 +161,7 @@ function setMarkersByDataCategory(getId, dataCategory) {
                 findIndexArray.push(index);
             }
         }
-        for(i of findIndexArray){
+        for (i of findIndexArray) {
             let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
             let markercolor =
@@ -171,7 +171,7 @@ function setMarkersByDataCategory(getId, dataCategory) {
                 "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
                 "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
             }
-    
+
             let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
             marker[i] = new kakao.maps.Marker({
                 map: map,
@@ -239,6 +239,16 @@ $(function () {
     $("#amount").val($("#slider-range").slider("values", 0) +
         " - " + $("#slider-range").slider("values", 1));
 });
+
+function checkRadioValue() {
+    document.getElementById("radio-all").addEventListener('click', function () {
+        // 1. radio 중 선택이 되어있는지 확인하고 바꿈 2. radio의 선택된 값을 가져옴.
+        // radio의 선택된 값을 가져옴.
+        let checked_value = $(":input:radio[name=select_form]:checked").val();
+        if (checked_value == "spi1") { console.log("hello"); }
+    })
+}
+
 function valueInitialize() {
     for (let key of Object.keys(csv_data[0])) {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
@@ -326,7 +336,7 @@ function selectData(selectedRow) {
         // chart 부분
         for (let key of keys) {
             for (let i = 0; i < 3; i++) {
-                removeData(myChart[key]);   
+                removeData(myChart[key]);
             }
             let sum = [0, 0, 0]
             label = ['L', 'M', 'H'];
@@ -360,7 +370,7 @@ function selectData(selectedRow) {
     // 선택시 chart 생성하는 for문
     for (let key of keys) {
         for (let i = 0; i < 3; i++) {
-            removeData(myChart[key]);   
+            removeData(myChart[key]);
         }
         label = ['L', 'M', 'H'];
         for (let i = 0; i < 3; i++) {
