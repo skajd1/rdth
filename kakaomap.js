@@ -341,7 +341,9 @@ function selectData(selectedRow) {
     if (selected === index) {
         // chart 부분
         for (let key of keys) {
-            removeData(myChart[key]);   // 기존 데이터 지움
+            for (let i = 0; i < 3; i++) {
+                removeData(myChart[key]);   
+            }
             let sum = [0, 0, 0]
             label = ['L', 'M', 'H'];
             for (let i = 0; i < 3; i++) // 데이터 다시 체워넣기
@@ -373,7 +375,9 @@ function selectData(selectedRow) {
 
     // 선택시 chart 생성하는 for문
     for (let key of keys) {
-        removeData(myChart[key]);
+        for (let i = 0; i < 3; i++) {
+            removeData(myChart[key]);   
+        }
         label = ['L', 'M', 'H'];
         for (let i = 0; i < 3; i++) {
             addData(myChart[key], label[i], csv_data[index][key][i]);
@@ -408,9 +412,6 @@ function makeChartData(dataArr) {
                     clamp: true,
                     clip: false,
                     align: 'top'
-
-
-
                 },
                 backgroundColor: [
                     'rgba(255, 99, 132, 1)',
@@ -437,7 +438,6 @@ function makeChartData(dataArr) {
                     beginAtZero: true,
                     type: 'category',
                 }
-
             }
         }
     }
@@ -447,11 +447,7 @@ function makeChartData(dataArr) {
 function removeData(chart) {
     /** 기존에 저장된 차트의 라벨과 데이터를 지우는 함수 */
     chart.data.labels.pop();
-    chart.data.labels.pop();
-    chart.data.labels.pop();
     chart.data.datasets.forEach((dataset) => {
-        dataset.data.pop();
-        dataset.data.pop();
         dataset.data.pop();
     });
     chart.update();
