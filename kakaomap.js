@@ -111,10 +111,10 @@ function setMarkers(select) {
 
         let markercolor =
         {
-            "all": marker_blue,
-            "SPI_1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-            "SPI_2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-            "SPI_3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+            "radio-all": marker_blue,
+            "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+            "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+            "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
         }
 
         let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
@@ -170,14 +170,13 @@ function setMarkersByDataCategory(getId, dataCategory) {
 
             let markercolor =
             {
-                "all": marker_blue,
-                "SPI_1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-                "SPI_2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-                "SPI_3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
+                "radio-all": marker_blue,
+                "radio-SPI1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
+                "radio-SPI2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
+                "radio-SPI3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
             }
-
-            let markerImage = new kakao.maps.MarkerImage(markercolor[getId], markerSize)
-
+    
+            let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
             marker[i] = new kakao.maps.Marker({
                 map: map,
                 position: position,
@@ -222,11 +221,9 @@ $(function () {
             // 여기에 함수 추가.
             map.setCenter(position)
             createIw();
-            setMarkers('all');
+            setMarkers('radio-all');
             valueInitialize()
             makeTable();
-
-
         }
     });
 });
@@ -240,7 +237,6 @@ $(function () {
         values: [0, 10],
         slide: function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
             $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-            setMarkersByDataCategory('SPI_1',ui.values)
         }
         // create: function() {} 슬라이더 생성시 이벤트 리스너
         // change: function() {} 슬라이더 값을 변경했을 때
@@ -248,7 +244,6 @@ $(function () {
     $("#amount").val($("#slider-range").slider("values", 0) +
         " - " + $("#slider-range").slider("values", 1));
 });
-
 function valueInitialize() {
     for (let key of Object.keys(csv_data[0])) {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
@@ -270,11 +265,8 @@ function valueInitialize() {
         else {
             setText(getAvg(ColumnData[key]).toFixed(3), key)
         }
-
     }
-
 }
-
 function getSum(data_array) {
     let sum = 0;
     for (let i = 0; i < csv_data.length; i++) {
@@ -295,7 +287,6 @@ function setText(value, ID) {
     */
     document.getElementById(ID).innerText = value
 }
-
 function makeTable() {
 
     let table = document.getElementById('cb3-table-body');
@@ -325,8 +316,6 @@ function makeTable() {
     }
 
 }
-
-
 function selectData(selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
@@ -390,8 +379,6 @@ function selectData(selectedRow) {
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
 }
-
-
 function makeChartData(dataArr) {
     /** 차트 생성 함수의 파라미터를 만드는 함수. 
      * 파라미터: dataArr(array)를 받아들임
@@ -442,8 +429,6 @@ function makeChartData(dataArr) {
         }
     }
 }
-
-
 function removeData(chart) {
     /** 기존에 저장된 차트의 라벨과 데이터를 지우는 함수 */
     chart.data.labels.pop();
