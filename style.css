@@ -13,6 +13,10 @@ body span {
     color: gray;
 }
 
+.radiobox hr{
+    border: dashed;
+    margin: 10px;
+}
 .main{
     margin-left : 7.5px;
     width : 1920px;

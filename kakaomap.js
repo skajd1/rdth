@@ -19,7 +19,7 @@ w : 분석 관심 폭
 */
 let csv_data = [];      // object[arr]
 let marker = [];        // object[arr] 생성된 maker들 모임
-let infoWindows = [];   // object[arr]
+let infoWindows = [];   // object[arr] 생성된 infoWindeow들 모임
 let ColumnData = {};    // obejct[object]
 let marker_green = "./greencircle.png";
 let marker_orange = "./orangecircle.png";
@@ -28,8 +28,7 @@ let marker_yellow = "./yellowcircle.png";
 let marker_blue = './bluecircle.png';
 let selected = -1
 let myChart = {};       // obejct[object]  {{'ChartName' : 'new Chart()'}, ... }
-let chart = {}
-let currently_selected_type = "radio-All";   // string 현제 선택된 도로상태유형을 저장. "radio-[딕셔너리의 key값들]"
+let currently_radio_type = "radio-All";   // string 현제 선택된 도로상태유형을 저장. "radio-[딕셔너리의 key값들]"
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
         center: new kakao.maps.LatLng(37, 125), // 지도의 중심좌표
@@ -42,17 +41,19 @@ map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 var zoomControl = new kakao.maps.ZoomControl();
 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-
+/** 지도의 레벨을 내리는 함수. (지도를 축소) */
 function zoomIn() {
-    /** 지도의 레벨을 내리는 함수. (지도를 축소) */
+
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
     // 지도를 1레벨 내립니다
     map.setLevel(level - 1);
 }
+
+/** 지도의 레벨을 올리는 함수. (지도를 확대) */
 function zoomOut() {
-    /** 지도의 레벨을 올리는 함수. (지도를 확대) */
+
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
@@ -60,14 +61,22 @@ function zoomOut() {
     map.setLevel(level + 1);
 
 }
+
+/** SPI의 marker에 맞는 색상을 줌.
+ * return url[string]
+ */
 function get_color_SPI(num) {
+
     if (num <= 2) { return marker_red; }
     else if (num <= 4) { return marker_orange; }
     else if (num <= 6) { return marker_yellow; }
     else if (num <= 8) { return marker_green; }
     else { return marker_blue }
 }
+
+/** infoWindow를 생성하는 함수. */
 function createIw() {
+
     for (let i = 0; i < csv_data.length; i++) {
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
         let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
@@ -79,67 +88,73 @@ function createIw() {
         infoWindows.push(infowindow);
     }
 }
+
+/** array를 받아 저장된 object(infoWindow)를 제거하는 함수 
+ * input object[arr]
+*/
 function deleteIw(iws) {
+
     if (iws.length !== 0) {
         for (let iw of iws) {
             iw.close()
         }
     }
 }
-function setSlider(getId) {
-    currently_selected_type = getId;
-    if (getId == "radio-All") {
-        document.getElementById("select_range").style.visibility = 'hidden';
-        setMarkers(getId);
-    }
-    else if (getId == "radio-SPI_1" || getId == "radio-SPI_2" || getId == "radio-SPI_3") {
-        document.getElementById("select_range").style.visibility = 'visible';
-        setMarkers(getId);
-        $(function () {
-            $("#slider-range").slider({
-                range: true,
-                min: 0,
-                max: 10,
-                step: 2,
-                values: [0, 10],
-                change : function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
-                    $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-                    $(setMarkerOpacityByScale(ui.values));
-                }
-            });
-            $("#amount").val($("#slider-range").slider("values", 0) +
-                " - " + $("#slider-range").slider("values", 1));
 
+/** 현제 선택된 radio의 설정에 맞는 slider를 생성하는 함수
+ * input id[string]
+ */
+function setSlider(getId) {
+
+    currently_radio_type = getId;
+    if (currently_radio_type == "radio-All") {
+        document.getElementById("select_range").style.visibility = 'hidden';
+        setMarkers(currently_radio_type);
+    }
+    else if (currently_radio_type == "radio-SPI_1" || currently_radio_type == "radio-SPI_2" || currently_radio_type == "radio-SPI_3") {
+        document.getElementById("select_range").style.visibility = 'visible';
+        setMarkers(currently_radio_type);
+        $("#slider-range").slider({
+            range: true,
+            min: 0,
+            max: 10,
+            step: 2,
+            values: [0, 10],
+            change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
+                $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+                $(setMarkerOpacityByScale(ui.values));
+            }
         });
+        $("#amount").val($("#slider-range").slider("values", 0) + " - " + $("#slider-range").slider("values", 1));
     }
     else {
         document.getElementById("select_range").style.visibility = 'visible';
-        setMarkers(getId);
-        $(function () {
-            $("#slider-range").slider({
-                range: true,
-                min: 0,
-                max: 10,
-                step: 1,
-                values: [0, 10],
-                change : function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
-                    $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-                    $(setMarkerOpacityByScale(ui.values));
-                }
-            });
-            $("#amount").val($("#slider-range").slider("values", 0) +
-                " - " + $("#slider-range").slider("values", 1));
-
+        setMarkers(currently_radio_type);
+        $("#slider-range").slider({
+            range: true,
+            min: 0,
+            max: 10,
+            step: 1,
+            values: [0, 10],
+            change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
+                $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+                $(setMarkerOpacityByScale(ui.values));
+            }
         });
+        $("#amount").val($("#slider-range").slider("values", 0) + " - " + $("#slider-range").slider("values", 1));
     }
 }
+
+/** slider에서 지정된 범위 scales[array]의 조건에 맞는 marker의 선명도(opacity)를 설정 
+ * input slider.ui.values[arr]
+*/
 function setMarkerOpacityByScale(scales) {
-    /** slider에서 지정된 범위 scales[array]의 조건에 맞는 marker의 선명도(opacity)를 설정 */
+
     let indexArr = [];
     let cnt = 0;
-    if (currently_selected_type !== 'radio-All') {
-        for (let i of ColumnData[currently_selected_type.split('-')[1]]) {
-            marker[cnt].setOpacity(0.1);
+    if (currently_radio_type !== 'radio-All') {
+        for (let i of ColumnData[currently_radio_type.split('-')[1]]) {
+            marker[cnt].setOpacity(0.15);
             if (scales[0] <= i && scales[1] >= i) { indexArr.push(cnt) }
             ++cnt;
         }
@@ -148,8 +163,12 @@ function setMarkerOpacityByScale(scales) {
         }
     }
 }
+
+/** Radio에서 선택되면 marker를 보여주는 함수
+ * input radioId[string]
+ */
 function setMarkers(select) {
-    /** Radio에서 선택되면 marker를 보여주는 함수 */
+
     deleteIw(infoWindows)
     deleteMarkers(marker)
     marker = []
@@ -225,15 +244,21 @@ function setMarkers(select) {
     }
 
 }
+
+/** marker[arr]에 저장된 모든 값을 지우는 함수
+ * input markers[arr]
+ */
 function deleteMarkers(marker) {
-    // marker와 범위인 인덱스 arr를 받아온다.
+
     if (marker.length !== 0) {
         for (let i = 0; i < csv_data.length; i++) {
             marker[i].setMap(null);
         }
     }
 }
+
 $(function () {
+
     let fileName = "pont.csv";
     $.ajax({
         url: fileName,
@@ -261,11 +286,14 @@ $(function () {
             createIw();
             setMarkers('radio-All');
             valueInitialize()
-            makeTable();
+            makeGrid();
         }
     });
 });
+
+/** 초기값 설정 함수 */
 function valueInitialize() {
+
     for (let key of Object.keys(csv_data[0])) {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
             continue;
@@ -288,27 +316,42 @@ function valueInitialize() {
         }
     }
 }
+
+/** 주어진 배열의 총합을 내보내는 함수 
+ * input data_array[arr]
+ * return sum[number]
+*/
 function getSum(data_array) {
+
     let sum = 0;
     for (let i = 0; i < csv_data.length; i++) {
         sum += parseFloat(data_array[i])
     }
     return sum;
 }
+
+/** 주어진 배열의 평균값을 내보내는 함수
+ * input data_array[arr]
+ * return avg[number]
+*/
 function getAvg(data_array) {
-    /*data_array(type:array) 받아들여 return 값으로 평균을 내주는 함수*/
+
     let sum = 0;
     for (let i = 0; i < csv_data.length; i++) {
         sum += parseFloat(data_array[i])
     }
     return (sum / csv_data.length);
 }
+
+/** value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
+ * input value[let], id[string]
+*/
 function setText(value, ID) {
-    /* value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
-    */
+
     document.getElementById(ID).innerText = value
 }
-function makeTable() {
+/** Grid를 생성하는 함수 */
+function makeGrid() {
 
     let table = document.getElementById('cb3-table-body');
     let table_head = ["dist", "note", "w", "pd", "roughness", "amount_crack", "ratio_crack", "SPI_1", "SPI_2",
@@ -335,8 +378,11 @@ function makeTable() {
             selectData(i)
         })
     }
-
 }
+
+/** 선택된 행에 맞는 이벤트를 발생하는 함수
+ * input row_index[number]
+ */
 function selectData(selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
@@ -352,7 +398,7 @@ function selectData(selectedRow) {
         // chart 부분
         for (let key of keys) {
             for (let i = 0; i < 3; i++) {
-                removeData(myChart[key]);
+                removeChartData(myChart[key]);
             }
             let sum = [0, 0, 0]
             label = ['L', 'M', 'H'];
@@ -361,7 +407,7 @@ function selectData(selectedRow) {
                 for (let j = 0; j < csv_data.length; j++) {
                     sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
-                addData(myChart[key], label[i], sum[i]);
+                addChartData(myChart[key], label[i], sum[i]);
             }
         }
 
@@ -385,11 +431,11 @@ function selectData(selectedRow) {
     // 선택시 chart 생성하는 for문
     for (let key of keys) {
         for (let i = 0; i < 3; i++) {
-            removeData(myChart[key]);
+            removeChartData(myChart[key]);
         }
         label = ['L', 'M', 'H'];
         for (let i = 0; i < 3; i++) {
-            addData(myChart[key], label[i], csv_data[index][key][i]);
+            addChartData(myChart[key], label[i], csv_data[index][key][i]);
         }
     }
 
@@ -399,6 +445,10 @@ function selectData(selectedRow) {
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
     selected = index
 }
+
+/** Chart 생성자에 들아갈 data를 만들어 주는 함수
+ * input L,M,H_data[arr]
+ */
 function makeChartData(dataArr) {
     /** 차트 생성 함수의 파라미터를 만드는 함수. 
      * 파라미터: dataArr(array)를 받아들임
@@ -449,7 +499,11 @@ function makeChartData(dataArr) {
         }
     }
 }
-function removeData(chart) {
+
+/** 만들어진 chart 안의 데이터 하나를 지우는 함수
+ * input myChart[?][object]
+ */
+function removeChartData(chart) {
     /** 기존에 저장된 차트의 라벨과 데이터를 지우는 함수 */
     chart.data.labels.pop();
     chart.data.datasets.forEach((dataset) => {
@@ -457,7 +511,11 @@ function removeData(chart) {
     });
     chart.update();
 }
-function addData(chart, label, data) {
+
+/** 만들어진 chart 안에 라벨과 데이터 하나를 넣는 함수 
+ * input myChart[?][object], label[string], data[number]
+*/
+function addChartData(chart, label, data) {
     /** 기존에 저장된 차트에 데이터를 추가하는 함수 */
     chart.data.labels.push(label);
     chart.data.datasets.forEach((dataset) => {
