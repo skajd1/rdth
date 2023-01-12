@@ -104,7 +104,7 @@ function setSlider(getId) {
                 values: [0, 10],
                 change : function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
                     $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-                    setMarkerOpacityByScale($("#slider-range").slider("values"));
+                    $(setMarkerOpacityByScale(ui.values));
                 }
             });
             $("#amount").val($("#slider-range").slider("values", 0) +
@@ -124,7 +124,7 @@ function setSlider(getId) {
                 values: [0, 10],
                 change : function (event, ui) {   // 슬라이더를 움직일 때 실행할 코드
                     $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-                    setMarkerOpacityByScale($("#slider-range").slider("values"));
+                    $(setMarkerOpacityByScale(ui.values));
                 }
             });
             $("#amount").val($("#slider-range").slider("values", 0) +
