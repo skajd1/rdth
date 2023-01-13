@@ -121,6 +121,7 @@ function makeSliderAndAmount(range, min, max, step, values) {
 }
 
 /** 현제 선택된 radio의 설정에 맞는 slider를 설정하는 함수
+ * html selectbox에서 버튼을 누를때마다 호출
  * input id[string]
  */
 function setSlider(getId) {
