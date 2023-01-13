@@ -80,7 +80,7 @@ function createIw() {
 
     for (let i = 0; i < csv_data_length; i++) {
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-        let iwContent = '<div><p>거리 : ' + csv_data[i].dist + '</p><p>비고 : ' + csv_data[i].note + '</p></div>' // 인포 윈도우 내용 설정
+        let iwContent = `<div><p>거리 : ${csv_data[i].dist}</p><p>비고 : ${csv_data[i].note}</p></div>` // 인포 윈도우 내용 설정
         let infowindow = new kakao.maps.InfoWindow({
             content: iwContent,
             removable: true,
@@ -277,7 +277,7 @@ $(function () {
             }
             csv_data_length = csv_data.length;
             for (let key of Object.keys(csv_data[0])) {
-                ColumnData[key] = [];
+                    ColumnData[key] = [];
                 for (let i = 0; i < csv_data_length; i++) {
                     ColumnData[key].push(csv_data[i][key])
                 }
