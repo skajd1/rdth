@@ -200,8 +200,8 @@ function deleteMarkers(marker) {
         }
     }
 }
-
-$(function () {
+start();
+function start() {
 
     let fileName = "pont.csv";
     $.ajax({
@@ -231,7 +231,7 @@ $(function () {
             valueInitialize();     
         }
     });
-});
+}
 
 /** 초기값 설정 함수 */
 function valueInitialize() {
@@ -282,7 +282,7 @@ function makeChart() {
                 sum[j] += parseFloat(ColumnData[key][i][j]);
             }
         }
-        myChart[key] = new Chart(key + '_Chart', makeChartData(sum));
+        myChart[key] = new Chart(key + '_Chart', makeChartData(sum));   // 최초의 myChart 객체 생성
     }
 }
 
@@ -376,9 +376,6 @@ function selectData(selectedRow) {
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
 
     let index = selectedRow;
-    let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]))
-    let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img
-    let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img
     let keys = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
     deleteIw(infoWindows)
     // 선택된 행을 다시 눌렀을 때
@@ -399,7 +396,6 @@ function selectData(selectedRow) {
             }
         }
 
-
         document.getElementById("table-row-" + index).style = "background-color : white"
         if (map.getLevel() <= 2) {
             zoomOut()
@@ -407,6 +403,10 @@ function selectData(selectedRow) {
         selected = -1
         return
     }
+
+    let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]));
+    let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[index].status_img;
+    let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[index].surf_img;
     infoWindows[index].open(map, marker[index]); // 클릭할 때 인포 윈도우 생성
     document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
     document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
