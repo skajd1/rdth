@@ -17,17 +17,17 @@ AP_H : 포트홀
 note : 비고
 w : 분석 관심 폭
 */
-let csv_data = [];      // object[arr]
+const csv_data = [];      // object[arr]
 let marker = [];        // object[arr] 생성된 maker들 모임
 let infoWindows = [];   // object[arr] 생성된 infoWindeow들 모임
-let ColumnData = {};    // obejct[object]
-let marker_green = "./greencircle.png";
-let marker_orange = "./orangecircle.png";
-let marker_red = "./redcircle.png";
-let marker_yellow = "./yellowcircle.png";
-let marker_blue = './bluecircle.png';
+const ColumnData = {};    // obejct[object]
+const marker_green = "./greencircle.png";
+const marker_orange = "./orangecircle.png";
+const marker_red = "./redcircle.png";
+const marker_yellow = "./yellowcircle.png";
+const marker_blue = './bluecircle.png';
 let selected = -1
-let myChart = {};       // obejct[object]  {{'ChartName' : 'new Chart()'}, ... }
+const myChart = {};       // obejct[object]  {{'ChartName' : 'new Chart()'}, ... }
 let currently_radio_type = "radio-All";   // string 현제 선택된 도로상태유형을 저장. "radio-[딕셔너리의 key값들]"
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = {
@@ -102,7 +102,25 @@ function deleteIw(iws) {
     }
 }
 
-/** 현제 선택된 radio의 설정에 맞는 slider를 생성하는 함수
+/** 받아들인 정보로 slider와 amount를 생성하는 함수
+ * input range[boolen], number, number, number, number[arr]
+ */
+function makeSliderAndAmount(range, min, max, step, values) {
+    $("#slider-range").slider({
+        range: range,
+        min: min,
+        max: max,
+        step: step,
+        values: values,
+        change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
+            $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+            $(setMarkerOpacityByScale(ui.values));
+        }
+    });
+    $("#amount").val($("#slider-range").slider("values", 0) + " - " + $("#slider-range").slider("values", 1));
+}
+
+/** 현제 선택된 radio의 설정에 맞는 slider를 설정하는 함수
  * input id[string]
  */
 function setSlider(getId) {
@@ -115,34 +133,12 @@ function setSlider(getId) {
     else if (["radio-SPI_1", "radio-SPI_2", "radio-SPI_3"].includes(currently_radio_type)) {
         document.getElementById("select_range").style.visibility = 'visible';
         setMarkers(currently_radio_type);
-        $("#slider-range").slider({
-            range: true,
-            min: 0,
-            max: 10,
-            step: 2,
-            values: [0, 10],
-            change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
-                $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-                $(setMarkerOpacityByScale(ui.values));
-            }
-        });
-        $("#amount").val($("#slider-range").slider("values", 0) + " - " + $("#slider-range").slider("values", 1));
+        makeSliderAndAmount(true,0,10,2,[0,10]);
     }
     else {
         document.getElementById("select_range").style.visibility = 'visible';
         setMarkers(currently_radio_type);
-        $("#slider-range").slider({
-            range: true,
-            min: 0,
-            max: 10,
-            step: 1,
-            values: [0, 10],
-            change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
-                $("#amount").val(ui.values[0] + " - " + ui.values[1]);
-                $(setMarkerOpacityByScale(ui.values));
-            }
-        });
-        $("#amount").val($("#slider-range").slider("values", 0) + " - " + $("#slider-range").slider("values", 1));
+        makeSliderAndAmount(true,0,10,1,[0,10]);
     }
 }
 
