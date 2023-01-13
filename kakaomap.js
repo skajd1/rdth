@@ -66,9 +66,9 @@ function zoomOut() {
 /** SPI의 marker에 맞는 색상을 줌.
  * return url[string]
  */
-function get_color_SPI(num) {
+function getColor(num) {
 
-    if (num <= 2) { return marker_red; }
+    if (num <= 2 && num >= 0) { return marker_red; }
     else if (num <= 4) { return marker_orange; }
     else if (num <= 6) { return marker_yellow; }
     else if (num <= 8) { return marker_green; }
@@ -106,12 +106,14 @@ function deleteIw(iws) {
  * input range[boolen], number, number, number, number[arr]
  */
 function makeSliderAndAmount(range, min, max, step, values) {
+
     $("#slider-range").slider({
         range: range,
         min: min,
         max: max,
         step: step,
         values: values,
+        opacity: 1,
         change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
             $("#amount").val(ui.values[0] + " - " + ui.values[1]);
             $(setMarkerOpacityByScale(ui.values));
@@ -134,12 +136,12 @@ function setSlider(getId) {
     else if (["radio-SPI_1", "radio-SPI_2", "radio-SPI_3"].includes(currently_radio_type)) {
         document.getElementById("select_range").style.visibility = 'visible';
         setMarkers(currently_radio_type);
-        makeSliderAndAmount(true,0,10,2,[0,10]);
+        makeSliderAndAmount(true, 0, 10, 2, [0, 10]);
     }
     else {
         document.getElementById("select_range").style.visibility = 'visible';
         setMarkers(currently_radio_type);
-        makeSliderAndAmount(true,0,10,1,[0,10]);
+        makeSliderAndAmount(true, 0, 10, 1, [0, 10]);
     }
 }
 
@@ -148,97 +150,39 @@ function setSlider(getId) {
 */
 function setMarkerOpacityByScale(scales) {
 
-    let indexArr = [];
     let cnt = 0;
     if (currently_radio_type !== 'radio-All') {
         for (let i of ColumnData[currently_radio_type.split('-')[1]]) {
-            marker[cnt].setOpacity(0.15);
-            if (scales[0] <= i && scales[1] >= i) { indexArr.push(cnt) }
+            (scales[0] > i || scales[1] < i) ? marker[cnt].setOpacity(0.15) : marker[cnt].setOpacity(1);
             ++cnt;
-        }
-        for (let i of indexArr) {
-            marker[i].setOpacity(1);
         }
     }
 }
 
-/** Radio에서 선택되면 marker를 보여주는 함수
- * input radioId[string]
- */
-function setMarkers(select) {
+/** Radio에서 선택되면 marker를 만들고 설정하는 함수. */
+function setMarkers() {
 
     deleteIw(infoWindows)
     deleteMarkers(marker)
     marker = []
+
     let markerSize = new kakao.maps.Size(10, 10);
+    for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
+        let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
-    if (select == "radio-All") {
-        for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
-            let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-
-            let markerImage = new kakao.maps.MarkerImage(marker_blue, markerSize)
-            marker[i] = new kakao.maps.Marker({
-                map: map,
-                position: position,
-                image: markerImage,
-                clickable: true
-            });
-            // 클릭 리스너, 다른 차트와 연동할 때 사용
-            kakao.maps.event.addListener(marker[i], 'click', function () {
-                selectData(i)
-            }
-            );
+        markercolor = (currently_radio_type === 'radio-All') ? marker_blue : getColor(parseFloat(csv_data[i][currently_radio_type.split('-')[1]]))
+        let markerImage = new kakao.maps.MarkerImage(markercolor, markerSize)
+        marker[i] = new kakao.maps.Marker({
+            map: map,
+            position: position,
+            image: markerImage,
+            clickable: true
+        });
+        // 클릭 리스너, 다른 차트와 연동할 때 사용
+        kakao.maps.event.addListener(marker[i], 'click', function () {
+            selectData(i)
         }
-    }
-    else if (["radio-SPI_1", "radio-SPI_2", "radio-SPI_3"].includes(currently_radio_type)) {
-
-        for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
-            let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-
-            let markercolor =
-            {
-                "radio-SPI_1": get_color_SPI(parseFloat(csv_data[i].SPI_1)),
-                "radio-SPI_2": get_color_SPI(parseFloat(csv_data[i].SPI_2)),
-                "radio-SPI_3": get_color_SPI(parseFloat(csv_data[i].SPI_3)),
-            }
-            let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
-            marker[i] = new kakao.maps.Marker({
-                map: map,
-                position: position,
-                image: markerImage,
-                clickable: true
-            });
-            // 클릭 리스너, 다른 차트와 연동할 때 사용
-            kakao.maps.event.addListener(marker[i], 'click', function () {
-                selectData(i)
-            }
-            );
-        }
-    }
-    else {
-        for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
-            let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-
-            let markercolor =
-            {
-                "radio-pd": get_color_SPI(parseFloat(csv_data[i].pd)),
-                "radio-roughness": get_color_SPI(parseFloat(csv_data[i].roughness)),
-                "radio-amount_crack": get_color_SPI(parseFloat(csv_data[i].amount_crack)),
-                "radio-ratio_crack": get_color_SPI(parseFloat(csv_data[i].ratio_crack)),
-            }
-            let markerImage = new kakao.maps.MarkerImage(markercolor[select], markerSize)
-            marker[i] = new kakao.maps.Marker({
-                map: map,
-                position: position,
-                image: markerImage,
-                clickable: true
-            });
-            // 클릭 리스너, 다른 차트와 연동할 때 사용
-            kakao.maps.event.addListener(marker[i], 'click', function () {
-                selectData(i)
-            }
-            );
-        }
+        );
     }
 
 }
@@ -274,7 +218,7 @@ $(function () {
             }
             csv_data_length = csv_data.length;
             for (let key of Object.keys(csv_data[0])) {
-                    ColumnData[key] = [];
+                ColumnData[key] = [];
                 for (let i = 0; i < csv_data_length; i++) {
                     ColumnData[key].push(csv_data[i][key])
                 }
@@ -283,51 +227,23 @@ $(function () {
             // 여기에 함수 추가.
             map.setCenter(position)
             createIw();
-            setMarkers('radio-All');
-            valueInitialize()
-            makeGrid();
+            setMarkers();
+            valueInitialize();     
         }
     });
 });
 
 /** 초기값 설정 함수 */
 function valueInitialize() {
-
-    for (let key of Object.keys(csv_data[0])) {
-        if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
-            continue;
-        }
-        else if (key === 'dist') {
-            setText(parseFloat(ColumnData.dist[csv_data_length - 1]).toFixed(3) + " km", "dist");
-        }
-        else if (key === 'AP_L' || key === 'AP_T' || key === 'AP_CJ' || key === 'AP_AC' || key === 'AP_P' || key === 'AP_H') {
-            let sum = [0, 0, 0]
-
-            for (let j = 0; j < 3; j++) {
-                for (let i = 0; i < csv_data_length; i++) {
-                    sum[j] += parseFloat(ColumnData[key][i][j]);
-                }
-            }
-            myChart[key] = new Chart(key + '_Chart', makeChartData(sum));
-        }
-        else {
-            setText(getAvg(ColumnData[key]).toFixed(3), key)
-        }
+    setText(parseFloat(ColumnData.dist[csv_data_length - 1]).toFixed(3) + " km", "dist");
+    for (let key of ["pd", "roughness", "amount_crack", "ratio_crack", "SPI_1", "SPI_2", "SPI_3"]) {
+        setText(getAvg(ColumnData[key]).toFixed(3), key)
     }
+    makeChart();
+    makeGrid();
 }
 
-/** 주어진 배열의 총합을 내보내는 함수 
- * input data_array[arr]
- * return sum[number]
-*/
-function getSum(data_array) {
 
-    let sum = 0;
-    for (let i = 0; i < csv_data_length; i++) {
-        sum += parseFloat(data_array[i])
-    }
-    return sum;
-}
 
 /** 주어진 배열의 평균값을 내보내는 함수
  * input data_array[arr]
@@ -336,10 +252,10 @@ function getSum(data_array) {
 function getAvg(data_array) {
 
     let sum = 0;
-    for (let i = 0; i < csv_data_length; i++) {
+    for (let i = 0; i < data_array.length; i++) {
         sum += parseFloat(data_array[i])
     }
-    return (sum / csv_data_length);
+    return (sum / data_array.length);
 }
 
 /** value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
@@ -349,6 +265,23 @@ function setText(value, ID) {
 
     document.getElementById(ID).innerText = value
 }
+
+/** Chart를 생성하는 함수 */
+function makeChart() {
+
+    let id = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
+
+    for (let key of id) {
+        let sum = [0, 0, 0]
+        for (let j = 0; j < 3; j++) {
+            for (let i = 0; i < csv_data_length; i++) {
+                sum[j] += parseFloat(ColumnData[key][i][j]);
+            }
+        }
+        myChart[key] = new Chart(key + '_Chart', makeChartData(sum));
+    }
+}
+
 /** Grid를 생성하는 함수 */
 function makeGrid() {
 
