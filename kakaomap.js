@@ -67,12 +67,12 @@ function zoomOut() {
 /** SPI의 marker에 맞는 색상을 줌.
  * return url[string]
  */
-function getColor(num) {
+function getColor(_num) {
 
-    if (num <= 2 && num >= 0) { return marker_red; }
-    else if (num <= 4) { return marker_orange; }
-    else if (num <= 6) { return marker_yellow; }
-    else if (num <= 8) { return marker_green; }
+    if (_num <= 2 && _num >= 0) { return marker_red; }
+    else if (_num <= 4) { return marker_orange; }
+    else if (_num <= 6) { return marker_yellow; }
+    else if (_num <= 8) { return marker_green; }
     else { return marker_blue }
 }
 
@@ -94,10 +94,10 @@ function createIw() {
 /** array를 받아 저장된 object(infoWindow)를 제거하는 함수 
  * input object[arr]
 */
-function deleteIw(iws) {
+function deleteIw(_iws) {
 
-    if (iws.length !== 0) {
-        for (let iw of iws) {
+    if (_iws.length !== 0) {
+        for (let iw of _iws) {
             iw.close()
         }
     }
@@ -108,9 +108,9 @@ function deleteIw(iws) {
  * html selectbox에서 버튼을 누를때마다 호출
  * input id[string]
  */
-function setSlider(getId) {
+function setSlider(_getId) {
 
-    currently_radio_type = getId;
+    currently_radio_type = _getId;
     $(setMarkerImage());
     if (currently_radio_type === "radio-All") {
         document.getElementById("select_range").style.visibility = 'hidden';
@@ -128,14 +128,14 @@ function setSlider(getId) {
 /** 받아들인 정보로 slider와 amount를 생성하는 함수
  * input range[boolen], number, number, number, number[arr]
  */
-function makeSliderAndAmount(range, min, max, step, values) {
+function makeSliderAndAmount(_range, _min, _max, _step, _values) {
     
     $("#slider-range").slider({
-        range: range,
-        min: min,
-        max: max,
-        step: step,
-        values: values,
+        range: _range,
+        min: _min,
+        max: _max,
+        step: _step,
+        values: _values,
         opacity: 1,
         change: function (event, ui) {   // 슬라이더의 움직임에 반응하는 값or함수들 모음
             $("#amount").val(ui.values[0] + " - " + ui.values[1]);
@@ -148,12 +148,12 @@ function makeSliderAndAmount(range, min, max, step, values) {
 /** slider에서 지정된 범위 scales[array]의 조건에 맞는 marker의 선명도(opacity)를 설정 
  * input slider.ui.values[arr]
 */
-function setMarkerOpacityByScale(scales) {
+function setMarkerOpacityByScale(_scales) {
     
     let cnt = 0;
     if (currently_radio_type !== 'radio-All') {
         for (let i of ColumnData[currently_radio_type.split('-')[1]]) {
-            (scales[0] > i || scales[1] < i) ? marker[cnt].setOpacity(0.15) : marker[cnt].setOpacity(1);
+            (_scales[0] > i || _scales[1] < i) ? marker[cnt].setOpacity(0.15) : marker[cnt].setOpacity(1);
             ++cnt;
         }
     }
@@ -192,11 +192,11 @@ function setMarkerImage(){
 /** marker[arr]에 저장된 모든 값을 지우는 함수
  * input markers[arr]
  */
-function deleteMarkers(marker) {
+function deleteMarkers(_marker) {
 
-    if (marker.length !== 0) {
+    if (_marker.length !== 0) {
         for (let i = 0; i < csv_data_length; i++) {
-            marker[i].setMap(null);
+            _marker[i].setMap(null);
         }
     }
 }
@@ -207,9 +207,9 @@ function start() {
     $.ajax({
         url: fileName,
         dataType: "text",
-        success: function (data) {
+        success: function (_data) {
 
-            let allRow = data.split("\n");
+            let allRow = _data.split("\n");
             for (let i = 14; i < allRow.length - 1; i++) {
                 let column = allRow[i].split(",")
                 csv_data.push({
@@ -253,21 +253,21 @@ function valueInitialize() {
  * input data_array[arr]
  * return avg[number]
 */
-function getAvg(data_array) {
+function getAvg(_data_array) {
 
     let sum = 0;
-    for (let i = 0; i < data_array.length; i++) {
-        sum += parseFloat(data_array[i])
+    for (let i = 0; i < _data_array.length; i++) {
+        sum += parseFloat(_data_array[i])
     }
-    return (sum / data_array.length);
+    return (sum / _data_array.length);
 }
 
 /** value 값을 받아들여 html ID에 text 형식으로 넘겨주는 함수
  * input value[let], id[string]
 */
-function setText(value, ID) {
+function setText(_value, _ID) {
 
-    document.getElementById(ID).innerText = value
+    document.getElementById(_ID).innerText = _value
 }
 
 /** Chart를 생성하는 함수 */
@@ -286,11 +286,11 @@ function makeChart() {
     }
 }
 
-/** Chart 생성자에 들아갈 data를 만들어 주는 함수
+/** dataArr 파라미터를 Chart 생성자에 들아갈 수 있는 data 형태로 알맞게 만들어 주는 함수
  * input L,M,H_data[arr]
  * return chart_data[object]
  */
-function makeChartData(dataArr) {
+function makeChartData(_dataArr) {
 
     // key로 label 값 정해주기
     return {
@@ -298,7 +298,7 @@ function makeChartData(dataArr) {
         data: {
             labels: ['L', 'M', 'H'],
             datasets: [{
-                data: dataArr,
+                data: _dataArr,
                 datalabels: {
                     color: 'black',
                     font: { size: 12 },
@@ -371,11 +371,11 @@ function makeGrid() {
 /** 선택된 행에 맞는 이벤트를 발생하는 함수
  * input row_index[number]
  */
-function selectData(selectedRow) {
+function selectData(_selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
 
-    let index = selectedRow;
+    let index = _selectedRow;
     let keys = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
     deleteIw(infoWindows)
     // 선택된 행을 다시 눌렀을 때
@@ -437,23 +437,23 @@ function selectData(selectedRow) {
 /** 만들어진 chart 안의 데이터 하나를 지우는 함수
  * input myChart[?][object]
  */
-function removeChartData(chart) {
+function removeChartData(_chart) {
 
-    chart.data.labels.pop();
-    chart.data.datasets.forEach((dataset) => {
+    _chart.data.labels.pop();
+    _chart.data.datasets.forEach((dataset) => {
         dataset.data.pop();
     });
-    chart.update();
+    _chart.update();
 }
 
 /** 만들어진 chart 안에 라벨과 데이터 하나를 넣는 함수 
  * input myChart[?][object], label[string], data[number]
 */
-function addChartData(chart, label, data) {
+function addChartData(_chart, _label, _data) {
 
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
+    _chart.data.labels.push(_label);
+    _chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(_data);
     });
-    chart.update();
+    _chart.update();
 }
