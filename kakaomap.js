@@ -129,7 +129,7 @@ function setSlider(_getId) {
  * input range[boolen], number, number, number, number[arr]
  */
 function makeSliderAndAmount(_range, _min, _max, _step, _values) {
-    
+
     $("#slider-range").slider({
         range: _range,
         min: _min,
@@ -149,7 +149,7 @@ function makeSliderAndAmount(_range, _min, _max, _step, _values) {
  * input slider.ui.values[arr]
 */
 function setMarkerOpacityByScale(_scales) {
-    
+
     let cnt = 0;
     if (currently_radio_type !== 'radio-All') {
         for (let i of ColumnData[currently_radio_type.split('-')[1]]) {
@@ -161,10 +161,10 @@ function setMarkerOpacityByScale(_scales) {
 
 /** Radio에서 선택되면 marker를 만들고 설정하는 함수. */
 function setMarkers() {
-    
+
     for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
-        
+
         marker[i] = new kakao.maps.Marker({
             map: map,
             position: position,
@@ -179,10 +179,10 @@ function setMarkers() {
     setMarkerImage();
 }
 
-function setMarkerImage(){
-    
+function setMarkerImage() {
+
     for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
-        markercolor = (currently_radio_type === 'radio-All') ? 
+        markercolor = (currently_radio_type === 'radio-All') ?
             marker_blue : getColor(parseFloat(csv_data[i][currently_radio_type.split('-')[1]]));
         let markerImage = new kakao.maps.MarkerImage(markercolor, markerSize);
         marker[i].setImage(markerImage);
@@ -227,8 +227,8 @@ function start() {
                     ColumnData[key].push(csv_data[i][key])
                 }
             }
-            
-            valueInitialize();     
+
+            valueInitialize();
         }
     });
 }
@@ -347,24 +347,24 @@ function makeGrid() {
 
     for (let i = 0; i < csv_data_length; i++) {
         let tr = document.createElement("tr");
-        tr.id = 'table-row-' + i
+        tr.id = 'table-row-' + i;
         count = 0
         for (let head of table_head) {
-            let td = document.createElement("td")
+            let td = document.createElement("td");
             if (head.startsWith('AP_')) {
                 td.appendChild(document.createTextNode(ColumnData[head][i][count % 3] + ""));
-                tr.appendChild(td)
-                count++
+                tr.appendChild(td);
+                count++;
             }
             else {
                 td.appendChild(document.createTextNode(ColumnData[head][i] + ""));
-                tr.appendChild(td)
+                tr.appendChild(td);
             }
         }
         table.appendChild(tr);
         tr.addEventListener('click', function () {
-            selectData(i)
-        })
+            selectData(i);
+        });
     }
 }
 
@@ -385,7 +385,7 @@ function selectData(_selectedRow) {
             for (let i = 0; i < 3; i++) {
                 removeChartData(myChart[key]);
             }
-            let sum = [0, 0, 0]
+            let sum = [0, 0, 0];
             label = ['L', 'M', 'H'];
             for (let i = 0; i < 3; i++) // 데이터 다시 체워넣기
             {
@@ -398,10 +398,10 @@ function selectData(_selectedRow) {
 
         document.getElementById("table-row-" + index).style = "background-color : white"
         if (map.getLevel() <= 2) {
-            zoomOut()
+            zoomOut();
         }
-        selected = -1
-        return
+        selected = -1;
+        return;
     }
 
     let position = new kakao.maps.LatLng(parseFloat(csv_data[index].latlng[0]), parseFloat(csv_data[index].latlng[1]));
@@ -412,26 +412,27 @@ function selectData(_selectedRow) {
     document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
     for (let i = 0; i < csv_data_length; i++) // 다른 행 강조 해제
     {
-        document.getElementById("table-row-" + i).style = "background-color : white"
+        document.getElementById("table-row-" + i).style = "background-color : white";
     }
-    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)" // 행 강조
+    document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)"; // 행 강조
 
     // 선택시 chart 생성하는 for문
+    copyChart = { ...myChart };
     for (let key of keys) {
         for (let i = 0; i < 3; i++) {
-            removeChartData(myChart[key]);
+            removeChartData(copyChart[key]);
         }
         label = ['L', 'M', 'H'];
         for (let i = 0; i < 3; i++) {
-            addChartData(myChart[key], label[i], csv_data[index][key][i]);
+            addChartData(copyChart[key], label[i], csv_data[index][key][i]);
         }
     }
 
     if (map.getLevel() > 2) {
-        zoomIn()
+        zoomIn();
     }
     map.setCenter(position) // 선택한 마커 중심으로 맵 이동
-    selected = index
+    selected = index;
 }
 
 /** 만들어진 chart 안의 데이터 하나를 지우는 함수
