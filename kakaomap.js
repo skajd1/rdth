@@ -294,54 +294,50 @@ function makeChart() {
  * input L,M,H_data[arr]
  * return chart_data[object]
  */
-function makeChartData(_dataArr) {
-    console.log("makeChartData");
-
-    // key로 label 값 정해주기
-    return {
-        type: 'bar',
-        data: {
-            labels: ['L', 'M', 'H'],
-            datasets: [{
-                data: _dataArr,
-                datalabels: {
-                    color: 'black',
-                    font: { size: 12 },
-                    offset: 3,
-                    anchor: 'end',
-                    clamp: true,
-                    clip: false,
-                    align: 'top'
-                },
-                backgroundColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                ],
-            }]
+const makeChartData = (_dataArr) => ({
+    type: 'bar',
+    data: {
+        labels: ['L', 'M', 'H'],
+        datasets: [{
+            data: _dataArr,
+            datalabels: {
+                color: 'black',
+                font: { size: 12 },
+                offset: 3,
+                anchor: 'end',
+                clamp: true,
+                clip: false,
+                align: 'top'
+            },
+            backgroundColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+            ],
+        }]
+    },
+    plugins: [ChartDataLabels],
+    options: {
+        plugins: {
+            legend: {
+                display: false
+            }
         },
-        plugins: [ChartDataLabels],
-        options: {
-            plugins: {
-                legend: {
-                    display: false
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { // y축 줄당 표시 값
+                    stepSize: 2
                 }
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { // y축 줄당 표시 값
-                        stepSize: 2
-                    }
-                },
-                x: {
-                    beginAtZero: true,
-                    type: 'category',
-                }
+            x: {
+                beginAtZero: true,
+                type: 'category',
             }
         }
     }
-}
+})
+
 
 /** Grid를 생성하는 함수 */
 function makeGrid() {
@@ -444,7 +440,7 @@ function selectData(_selectedRow) {
 /** 만들어진 chart 안의 데이터 하나를 지우는 함수
  * input myChart[?][object]
  */
-function removeChartData(_chart) {
+const removeChartData = (_chart) => {
     console.log("removeChartData");
 
     _chart.data.datasets.forEach((dataset) => {
@@ -455,7 +451,7 @@ function removeChartData(_chart) {
 /** 만들어진 chart 안에 라벨과 데이터 하나를 넣는 함수 
  * input myChart[?][object], label[string], data[number]
 */
-function addChartData(_chart, _data) {
+const addChartData = (_chart, _data) => {
     console.log("addChartData");
 
     _chart.data.datasets.forEach((dataset) => {
