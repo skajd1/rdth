@@ -45,7 +45,7 @@ let csv_data_length;    //csv_data.lenght 값을 저장.
 
 /** 지도의 레벨을 내리는 함수. (지도를 축소) */
 function zoomIn() {
-
+    console.log("zoomIn");
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
@@ -55,7 +55,7 @@ function zoomIn() {
 
 /** 지도의 레벨을 올리는 함수. (지도를 확대) */
 function zoomOut() {
-
+    console.log("zoomOut");
     // 현재 지도의 레벨을 얻어옵니다
     var level = map.getLevel();
 
@@ -68,7 +68,7 @@ function zoomOut() {
  * return url[string]
  */
 function getColor(_num) {
-
+    console.log("getColor");
     if (_num <= 2 && _num >= 0) { return marker_red; }
     else if (_num <= 4) { return marker_orange; }
     else if (_num <= 6) { return marker_yellow; }
@@ -78,7 +78,7 @@ function getColor(_num) {
 
 /** infoWindow를 생성하는 함수. */
 function createIw() {
-
+    console.log("createIw");
     for (let i = 0; i < csv_data_length; i++) {
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
         let iwContent = `<div><p>거리 : ${csv_data[i].dist}</p><p>비고 : ${csv_data[i].note}</p></div>` // 인포 윈도우 내용 설정
@@ -95,7 +95,7 @@ function createIw() {
  * input object[arr]
 */
 function deleteIw(_iws) {
-
+    console.log("deleteIw");
     if (_iws.length !== 0) {
         for (let iw of _iws) {
             iw.close()
@@ -109,7 +109,7 @@ function deleteIw(_iws) {
  * input id[string]
  */
 function setSlider(_getId) {
-
+    console.log("setSlider");
     currently_radio_type = _getId;
     $(setMarkerImage());
     if (currently_radio_type === "radio-All") {
@@ -129,7 +129,7 @@ function setSlider(_getId) {
  * input range[boolen], number, number, number, number[arr]
  */
 function makeSliderAndAmount(_range, _min, _max, _step, _values) {
-
+    console.log("makeSliderAndAmount");
     $("#slider-range").slider({
         range: _range,
         min: _min,
@@ -149,7 +149,7 @@ function makeSliderAndAmount(_range, _min, _max, _step, _values) {
  * input slider.ui.values[arr]
 */
 function setMarkerOpacityByScale(_scales) {
-
+    console.log("setMarkerOpacityByScale");
     let cnt = 0;
     if (currently_radio_type !== 'radio-All') {
         for (let i of ColumnData[currently_radio_type.split('-')[1]]) {
@@ -161,7 +161,7 @@ function setMarkerOpacityByScale(_scales) {
 
 /** Radio에서 선택되면 marker를 만들고 설정하는 함수. */
 function setMarkers() {
-
+    console.log("setMarkers");
     for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
         let position = new kakao.maps.LatLng(parseFloat(csv_data[i].latlng[0]), parseFloat(csv_data[i].latlng[1]))
 
@@ -180,7 +180,7 @@ function setMarkers() {
 }
 
 function setMarkerImage() {
-
+    console.log("setMarkerImage");
     for (let i = 0; i < csv_data_length; i++) { // 마커 하나씩 지정해서 대입
         markercolor = (currently_radio_type === 'radio-All') ?
             marker_blue : getColor(parseFloat(csv_data[i][currently_radio_type.split('-')[1]]));
@@ -193,7 +193,7 @@ function setMarkerImage() {
  * input markers[arr]
  */
 function deleteMarkers(_marker) {
-
+    console.log("deleteMarkers");
     if (_marker.length !== 0) {
         for (let i = 0; i < csv_data_length; i++) {
             _marker[i].setMap(null);
@@ -202,7 +202,7 @@ function deleteMarkers(_marker) {
 }
 start();
 function start() {
-
+    console.log("start");
     let fileName = "pont.csv";
     $.ajax({
         url: fileName,
@@ -235,6 +235,7 @@ function start() {
 
 /** 초기값 설정 함수 */
 function valueInitialize() {
+    console.log("valueInitialize");
     let position = new kakao.maps.LatLng(parseFloat(csv_data[0].latlng[0]), parseFloat(csv_data[0].latlng[1]))
     map.setCenter(position);
     createIw();
@@ -254,6 +255,7 @@ function valueInitialize() {
  * return avg[number]
 */
 function getAvg(_data_array) {
+    console.log("getAvg");
 
     let sum = 0;
     for (let i = 0; i < _data_array.length; i++) {
@@ -266,12 +268,14 @@ function getAvg(_data_array) {
  * input value[let], id[string]
 */
 function setText(_value, _ID) {
+    console.log("setText");
 
     document.getElementById(_ID).innerText = _value
 }
 
 /** Chart를 생성하는 함수 */
 function makeChart() {
+    console.log("makeChart");
 
     let id = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
 
@@ -291,6 +295,7 @@ function makeChart() {
  * return chart_data[object]
  */
 function makeChartData(_dataArr) {
+    console.log("makeChartData");
 
     // key로 label 값 정해주기
     return {
@@ -340,6 +345,7 @@ function makeChartData(_dataArr) {
 
 /** Grid를 생성하는 함수 */
 function makeGrid() {
+    console.log("makeGrid");
 
     let table = document.getElementById('cb3-table-body');
     let table_head = ["dist", "note", "w", "pd", "roughness", "amount_crack", "ratio_crack", "SPI_1", "SPI_2",
@@ -374,6 +380,7 @@ function makeGrid() {
 function selectData(_selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
+    console.log("selectData");
 
     let index = _selectedRow;
     let keys = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
@@ -386,13 +393,12 @@ function selectData(_selectedRow) {
                 removeChartData(myChart[key]);
             }
             let sum = [0, 0, 0];
-            label = ['L', 'M', 'H'];
             for (let i = 0; i < 3; i++) // 데이터 다시 체워넣기
             {
                 for (let j = 0; j < csv_data_length; j++) {
                     sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
-                addChartData(myChart[key], label[i], sum[i]);
+                addChartData(myChart[key], sum[i]);
             }
         }
 
@@ -422,9 +428,9 @@ function selectData(_selectedRow) {
         for (let i = 0; i < 3; i++) {
             removeChartData(copyChart[key]);
         }
-        label = ['L', 'M', 'H'];
+        
         for (let i = 0; i < 3; i++) {
-            addChartData(copyChart[key], label[i], csv_data[index][key][i]);
+            addChartData(copyChart[key], csv_data[index][key][i]);
         }
     }
 
@@ -439,8 +445,8 @@ function selectData(_selectedRow) {
  * input myChart[?][object]
  */
 function removeChartData(_chart) {
+    console.log("removeChartData");
 
-    _chart.data.labels.pop();
     _chart.data.datasets.forEach((dataset) => {
         dataset.data.pop();
     });
@@ -450,9 +456,9 @@ function removeChartData(_chart) {
 /** 만들어진 chart 안에 라벨과 데이터 하나를 넣는 함수 
  * input myChart[?][object], label[string], data[number]
 */
-function addChartData(_chart, _label, _data) {
+function addChartData(_chart, _data) {
+    console.log("addChartData");
 
-    _chart.data.labels.push(_label);
     _chart.data.datasets.forEach((dataset) => {
         dataset.data.push(_data);
     });
