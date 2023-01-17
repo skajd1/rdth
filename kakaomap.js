@@ -381,7 +381,7 @@ function selectData(_selectedRow) {
     //기존 선택되었던 컬럼 선택 해제,
     //인포윈도 , 사진 변경, 해당 열 강조, 차트 값 변경
     console.log("selectData");
-
+    copyChart = { ...myChart };
     let index = _selectedRow;
     let keys = ['AP_L', 'AP_T', 'AP_CJ', 'AP_AC', 'AP_P', 'AP_H'];
     deleteIw(infoWindows)
@@ -390,7 +390,7 @@ function selectData(_selectedRow) {
         // chart 부분
         for (let key of keys) {
             for (let i = 0; i < 3; i++) {
-                removeChartData(myChart[key]);
+                removeChartData(copyChart[key]);
             }
             let sum = [0, 0, 0];
             for (let i = 0; i < 3; i++) // 데이터 다시 체워넣기
@@ -398,8 +398,9 @@ function selectData(_selectedRow) {
                 for (let j = 0; j < csv_data_length; j++) {
                     sum[i] += parseFloat(ColumnData[key][j][i]);
                 }
-                addChartData(myChart[key], sum[i]);
+                addChartData(copyChart[key], sum[i]);
             }
+            copyChart[key].update();
         }
 
         document.getElementById("table-row-" + index).style = "background-color : white"
@@ -423,15 +424,14 @@ function selectData(_selectedRow) {
     document.getElementById("table-row-" + index).style = "background-color : rgb(144 144 185)"; // 행 강조
 
     // 선택시 chart 생성하는 for문
-    copyChart = { ...myChart };
     for (let key of keys) {
         for (let i = 0; i < 3; i++) {
             removeChartData(copyChart[key]);
         }
-        
         for (let i = 0; i < 3; i++) {
             addChartData(copyChart[key], csv_data[index][key][i]);
         }
+        copyChart[key].update()
     }
 
     if (map.getLevel() > 2) {
@@ -450,7 +450,6 @@ function removeChartData(_chart) {
     _chart.data.datasets.forEach((dataset) => {
         dataset.data.pop();
     });
-    _chart.update();
 }
 
 /** 만들어진 chart 안에 라벨과 데이터 하나를 넣는 함수 
@@ -462,5 +461,4 @@ function addChartData(_chart, _data) {
     _chart.data.datasets.forEach((dataset) => {
         dataset.data.push(_data);
     });
-    _chart.update();
 }
