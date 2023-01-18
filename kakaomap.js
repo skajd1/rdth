@@ -228,11 +228,11 @@ function start() {
                 }
             }
 
-            valueInitialize();
+            
         }
     });
 }
-
+setTimeout(() => { valueInitialize(); },1000);
 /** 초기값 설정 함수 */
 function valueInitialize() {
     console.log("valueInitialize");
