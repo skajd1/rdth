@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
+    <title>도로상태분석</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -20,9 +20,14 @@
         crossorigin="anonymous"></script>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">로드텍</span>
-        </div>
+            <a class="navbar-brand" href="./Home.html">로드텍</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+          </div>
     </nav>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 </head>
@@ -130,7 +135,7 @@
             <!-- cb1 - html -->
             <div class="cb1">
                 <div class="cb1-distance">
-                    <div>총거리 </div> <span style="margin-left : 10px; margin-top : 20px;" id="dist"></span>
+                    <div>총거리 </div><span style="margin-left : 10px; margin-top : 20px;" id="dist"></span>
                 </div>
 
                 <div class="cb1-deformation">
@@ -176,8 +181,8 @@
                     <canvas id="AP_L_Chart" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-T">
-                    AP 종방향 균열
-                    <canvas id="AP_T_Chart" width="400" height="400"></canvas>
+                    <span style = "position : relative; z-index : 0;">AP 종방향 균열</span>
+                    <canvas id="AP_T_Chart" style = "z-index : 1" width="400" height="400"></canvas>
                 </div>
                 <div class="cb2-AP-CJ">
                     AP 시공줄눈 균열

@@ -125,16 +125,8 @@ function setMarkers(select) {
             clickable: true
         });
 
-        let status_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_도로현황/D810/Camera1/0/' + csv_data[i].status_img
-        let surf_img_src = './가산로(2103)_하_2_2/가산로(2103)_하_2_2_U_net-result/0/' + csv_data[i].surf_img
 
-        // 클릭 리스너, 다른 차트와 연동할 때 사용
         kakao.maps.event.addListener(marker[i], 'click', function () {
-            // deleteIw(infoWindows)
-            // infoWindows[i].open(map, marker[i]); // 클릭할 때 인포 윈도우 생성
-            // document.getElementById("status_img").src = status_img_src; // 도로 현황 이미지 변경
-            // document.getElementById("surf_img").src = surf_img_src; // 도로 표면 이미지 변경
-            // map.setCenter(position) // 선택한 마커 중심으로 맵 이동
             selectData(i)
         }
         );
@@ -176,7 +168,7 @@ $(function () {
             map.setCenter(position)
             createIw();
             setMarkers('radio-all');
-            valueInitialize()
+            valueInitialize();
             makeTable();
 
 

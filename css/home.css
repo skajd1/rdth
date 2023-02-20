@@ -1,0 +1,29 @@
+.main{
+    position : absolute; top : 100px;
+    margin-left : 320px;
+    width : 1280px;
+    height : 830px;
+    display : flex;
+    border : 1px groove;
+    
+}
+.select-analyze{
+    width : 400px;
+    border : 1px groove;
+    height : 500px;
+    margin: auto;
+}
+.input-box{
+    border : 1px groove;
+    height : 500px;
+    width : 400px;
+    margin: auto;
+}
+.input-box > *{
+    text-align : center;
+    margin : auto;
+    margin-top : 45px;
+    border : 1px groove;
+    height : 100px;
+    width : 80%;
+}

@@ -93,7 +93,6 @@ body span {
     margin-right : 10px;
     text-align : center;
     padding: 20px 10px 20px 10px;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,7 +100,7 @@ body span {
 }
 
 .cb1-distance {
-    font-size: 2.0em;
+    font-size: 2.0rem;
     
 }
 .cb1-deformation {
@@ -165,6 +164,11 @@ body span {
 }
 
 /** class cb2 - chart 1, 2, 3*/
+
+canvas > *{
+    z-index : 1;
+    position : relative;
+}
 .cb2{
     margin-top : 5px;
     display : flex;
