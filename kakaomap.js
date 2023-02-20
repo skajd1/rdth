@@ -195,9 +195,9 @@ function valueInitialize() {
         if (key === 'w' || key === 'note' || key === 'status_img' || key === 'surf_img' || key === 'latlng') {
             continue;
         }
-        else if (key === 'dist') {
-            setText(parseFloat(ColumnData.dist[csv_data.length - 1]).toFixed(3) + " km", "dist");
-        }
+        // else if (key === 'dist') {
+        //     setText(parseFloat(ColumnData.dist[csv_data.length - 1]).toFixed(3) + " km", "dist");
+        // }
         else if (key === 'AP_L' || key === 'AP_T' || key === 'AP_CJ' || key === 'AP_AC' || key === 'AP_P' || key === 'AP_H') {
             let sum = [0, 0, 0]
 

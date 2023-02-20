@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -105,7 +106,7 @@
             </div>
         </div>
         <!-- 카카오 맵 -->
-        <div class="mapbox">
+        <div class="mapbox ">
             <div id="map" class="kakaomap"></div>
 
             <div class="imagebox">
@@ -131,162 +132,12 @@
         </div>
 
         <!-- html&chart&grid -->
-        <div class="chartbox">
-            <!-- cb1 - html -->
-            <div class="cb1">
-                <div class="cb1-distance">
-                    <div>총거리 </div><span style="margin-left : 10px; margin-top : 20px;" id="dist"></span>
-                </div>
-
-                <div class="cb1-deformation">
-                    <div class="cb1-deformation-content1">
-                        <div>평균 소성변형(mm)</div> <span id="pd"></span>
-                    </div>
-                    <div class="cb1-deformation-content2">
-                        <div>평균 종단평탄성(m/km)</div><span id="roughness"></span>
-                    </div>
-                </div>
-
-                <div class="cb1-crack">
-                    <div class="cb1-crack-content1">
-                        <div>평균 균열량(m²)</div><span id="amount_crack"></span>
-                    </div>
-                    <div class="cb1-crack-content2">
-                        <div>평균 균열율(%)</div><span id="ratio_crack"></span>
-                    </div>
-                </div>
-
-                <div class="cb1-SPI">
-                    <div style="display : flex;">
-                        <div>평균</div>
-                        <div style="font-weight : bold"> SPI</div>
-                    </div>
-                    <div class="cb1-SPI-content-box">
-                        <div class="cb1-SPI-content1">
-                            <div>도시고속도로</div><span id="SPI_1"></span>
-                        </div>
-                        <div class="cb1-SPI-content2">
-                            <div>주간선도로</div><span id="SPI_2"></span>
-                        </div>
-                        <div class="cb1-SPI-content3">
-                            <div>보조간선도로</div><span id="SPI_3"></span>
-                        </div>
-                    </div>
-                </div>
+        <div class="chartbox flex flex-col ">
+            <div class = 'flex flex-row h-2/3'>
+                <iframe width="1000" height="1080" src="https://studio.bix5.net/dashboards/4aab652329c2d853a38347e57de6dd2f" frameborder="0" style="border:0"></iframe>
+            
+         
             </div>
-
-            <div class="cb2">
-                <div class="cb2-AP-L">
-                    AP 횡방향 균열
-                    <canvas id="AP_L_Chart" width="400" height="400"></canvas>
-                </div>
-                <div class="cb2-AP-T">
-                    <span style = "position : relative; z-index : 0;">AP 종방향 균열</span>
-                    <canvas id="AP_T_Chart" style = "z-index : 1" width="400" height="400"></canvas>
-                </div>
-                <div class="cb2-AP-CJ">
-                    AP 시공줄눈 균열
-                    <canvas id="AP_CJ_Chart" width="400" height="400"></canvas>
-                </div>
-                <div class="cb2-AP-AC">
-                    AP 거북등껍질 균열
-                    <canvas id="AP_AC_Chart" width="400" height="400"></canvas>
-                </div>
-                <div class="cb2-AP-P">
-                    AP 패칭 균열
-                    <canvas id="AP_P_Chart" width="400" height="400"></canvas>
-                </div>
-                <div class="cb2-AP-H">
-                    AP 포트홀 균열
-                    <canvas id="AP_H_Chart" width="400" height="400"></canvas>
-                </div>
-            </div>
-            <div class="cb3">
-                <table cellspacing="1px" cellpadding="1px">
-                    <thead id="cb3-table-head">
-                        <tr>
-                            <th rowspan='2'>거리</th>
-                            <th rowspan='2'>비고</th>
-                            <th rowspan='2'>분석 폭(m)</th>
-                            <th rowspan='2'>소성변형(mm)</th>
-                            <th rowspan='2'>종단평탄성(m/km)</th>
-                            <th rowspan='2'>균열량(m²)</th>
-                            <th rowspan='2'>균열율(%)</th>
-                            <th rowspan='2'>도시고속도로</th>
-                            <th rowspan='2'>주간선도로</th>
-                            <th rowspan='2'>보조간선도로</th>
-                            <th colspan='3'>AP 종방향균열</th>
-                            <th colspan='3'>AP 횡방향균열</th>
-                            <th colspan='3'>AP 시공줄눈</th>
-                            <th colspan='3'>AP 거북등껍질</th>
-                            <th colspan='3'>AP 패칭</th>
-                            <th colspan='3'>AP 포트홀</th>
-                        </tr>
-                        <tr>
-                            <th>
-                                L
-                            </th>
-                            <th>
-                                M
-                            </th>
-                            <th>
-                                H
-                            </th>
-                            <th>
-                                L
-                            </th>
-                            <th>
-                                M
-                            </th>
-                            <th>
-                                H
-                            </th>
-                            <th>
-                                L
-                            </th>
-                            <th>
-                                M
-                            </th>
-                            <th>
-                                H
-                            </th>
-                            <th>
-                                L
-                            </th>
-                            <th>
-                                M
-                            </th>
-                            <th>
-                                H
-                            </th>
-                            <th>
-                                L
-                            </th>
-                            <th>
-                                M
-                            </th>
-                            <th>
-                                H
-                            </th>
-                            <th>
-                                L
-                            </th>
-                            <th>
-                                M
-                            </th>
-                            <th>
-                                H
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="cb3-table-body">
-
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
 
     </div>
 
